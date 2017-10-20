@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -30,32 +31,34 @@ public enum MessageType {
     MESSAGE("message_new") {
         @Override
         public Optional<Message> parse(JsonObject body) {
-            Message.Builder builder = Message.builder().setType(this);
+            final Message.Builder builder = Message.builder().setType(this);
+            final BiFunction<JsonObject, String, String> jsonStringFrom =
+                    (object, property) -> Optional.ofNullable(object.get("user_id"))
+                                                  .map(JsonElement::getAsString)
+                                                  .orElse("");
+
             Optional.ofNullable(body.get("object"))
                     .map(JsonElement::getAsJsonObject)
                     .map(object -> {
-                        final String user_id = Optional.ofNullable(object.get("user_id"))
-                                                       .map(JsonElement::getAsString)
-                                                       .orElse("");
-                        final String text = Optional.ofNullable(object.get("body"))
-                                                    .map(JsonElement::getAsString)
-                                                    .orElse("");
-                        builder.setUserVkId(user_id)
-                               .setText(text);
+                        builder.setUserVkId(jsonStringFrom.apply(object, "user_id"))
+                               .setText(jsonStringFrom.apply(object, "body"));
                         return object.get("attachments");
                     })
                     .map(attachments -> StreamSupport.stream(attachments.getAsJsonArray().spliterator(), false)
-                                    .map(JsonElement::getAsJsonObject)
-                                    .flatMap(attachment -> Optional.ofNullable(attachment.get("type"))
-                                            .map(JsonElement::getAsString)
-                                            .flatMap(type -> AttachmentType.of(type).parse(attachment).map(List::stream))
-                                            .orElseGet(Stream::empty)
+                                                     .map(JsonElement::getAsJsonObject)
+                                                     .flatMap(attachment ->
+                                                             Optional.ofNullable(attachment.get("type"))
+                                                                     .map(JsonElement::getAsString)
+                                                                     .flatMap(type -> AttachmentType.of(type)
+                                                                                                    .parse(attachment)
+                                                                                                    .map(List::stream))
+                                                                     .orElseGet(Stream::empty)
                                     )
                                     .collect(toList())
                     )
                     .ifPresent(builder::setAttachments);
 
-            return Optional.ofNullable(Message.builder().build());
+            return Optional.ofNullable(builder.build());
         }
     },
 
