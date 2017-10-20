@@ -11,6 +11,7 @@ dependencies {
     compile 'org.eclipse.jetty:jetty-server:9.4.7.v20170914'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'org.springframework.data:spring-data-jpa:2.0.0.RELEASE'
+    compile 'javax:javaee-api:+'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
 }
 
