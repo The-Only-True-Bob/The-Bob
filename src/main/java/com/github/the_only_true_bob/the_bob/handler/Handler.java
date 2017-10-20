@@ -8,4 +8,8 @@ public interface Handler extends Consumer<Message> {
     default void accept(final Message message) {
         // TODO: 20.10.17 Accept message and process
     }
+
+    static Handler bob() {
+        return new Handler() {};
+    }
 }
