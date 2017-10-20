@@ -3,6 +3,7 @@ package com.github.the_only_true_bob.the_bob.vk;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -38,11 +39,11 @@ public enum AttachmentType {
         this.string = string;
     }
 
-    public static AttachmentType of(String type) {
-        if (type.equals(AUDIO.toString())) {
-            return AUDIO;
-        }
-        return UNASSIGNED;
+    public static AttachmentType of(final String type) {
+        return Arrays.stream(values())
+                     .filter(attachmentType -> attachmentType.toString().equals(type))
+                     .findFirst()
+                     .orElse(UNASSIGNED);
     }
 
     @Override
