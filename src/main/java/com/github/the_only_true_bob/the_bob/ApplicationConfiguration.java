@@ -1,8 +1,6 @@
 package com.github.the_only_true_bob.the_bob;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
+import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.client.actors.UserActor;
@@ -22,6 +20,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -33,10 +33,15 @@ import static java.util.stream.Collectors.toList;
 @PropertySource("classpath:config.properties")
 public class ApplicationConfiguration {
 
-    @Value("${group.id}")
+    @Value("1")
     private int groupId;
-    @Value("${token}")
+
+    @Value("jhjbhjbh")
     private String token;
+
+    @Value("${confirmation.code}")
+    private static String confirmationCode;
+
 
     @Bean
     public VkApiClient vkApi() {
@@ -91,5 +96,15 @@ public class ApplicationConfiguration {
     @Bean
     public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
+    }
+
+    @Bean
+    public Handler bobHandler() {
+        return Handler.bob();
+    }
+
+    @Bean
+    public JettyHandler jettyHandler() {
+        return new JettyHandler();
     }
 }
