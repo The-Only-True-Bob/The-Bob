@@ -16,8 +16,8 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 @Configuration
-@ComponentScan("com.iampfac.demo")
-@EnableJpaRepositories("com.iampfac.demo.data.jpa")
+@ComponentScan("com.github.the_only_true_bob.the_bob")
+@EnableJpaRepositories("com.github.the_only_true_bob.the_bob")
 public class ApplicationConfiguration {
 
     @Bean
@@ -39,7 +39,7 @@ public class ApplicationConfiguration {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
         bean.setJpaVendorAdapter(jpaVendorAdapter);
-        bean.setPackagesToScan("com.iampfac.demo.data");
+        bean.setPackagesToScan("com.github.the_only_true_bob.the_bob");
         return bean;
     }
 
