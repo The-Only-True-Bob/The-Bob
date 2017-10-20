@@ -3,6 +3,7 @@ package com.github.the_only_true_bob.the_bob.vk;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -76,13 +77,11 @@ public enum MessageType {
         return string;
     }
 
-    public static MessageType of(String type) {
-        if (type.equals(POLL.toString())) {
-            return POLL;
-        } else if (type.equals(MESSAGE.toString())) {
-            return MESSAGE;
-        }
-        return UNASSIGNED;
+    public static MessageType of(final String type) {
+        return Arrays.stream(values())
+                     .filter(messageType -> messageType.toString().equals(type))
+                     .findFirst()
+                     .orElse(UNASSIGNED);
     }
 
     public abstract Optional<Message> parse(JsonObject body);
