@@ -3,10 +3,12 @@ package com.github.the_only_true_bob.the_bob.vk;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.List;
+
 public interface Message {
     // TODO: 20.10.17 Figure out how it should work and what it must consist
 
-    Type type();
+    MessageType type();
 
     String text();
 
@@ -18,14 +20,14 @@ public interface Message {
     static Message from(final JsonObject body) {
         final JsonElement typeJson = body.get("type");
         final String type = typeJson.getAsString();
-        return Type.of(type).parse(body).orElse(Message.empty());
+        return MessageType.of(type).parse(body).orElse(Message.empty());
     }
 
     static Message empty() {
         return new Message() {
             @Override
-            public Type type() {
-                return Type.UNASSIGNED;
+            public MessageType type() {
+                return MessageType.UNASSIGNED;
             }
 
             @Override
@@ -50,15 +52,16 @@ public interface Message {
     }
 
     class Builder {
-        private Type type;
+        private MessageType type;
         private String userVkId;
         private String text;
         private String pollId;
         private String optionId;
+        private List<Attachment> attachments;
 
         private Builder() { }
 
-        public Builder setType(Type type) {
+        public Builder setType(MessageType type) {
             this.type = type;
             return this;
         }
@@ -83,10 +86,15 @@ public interface Message {
             return this;
         }
 
+        public Builder setAttachments(List<Attachment> attachments) {
+            this.attachments = attachments;
+            return this;
+        }
+
         public Message build() {
             return new Message() {
                 @Override
-                public Type type() {
+                public MessageType type() {
                     return type;
                 }
 
