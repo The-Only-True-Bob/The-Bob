@@ -12,7 +12,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'org.springframework.data:spring-data-jpa:2.0.0.RELEASE'
     compile 'javax:javaee-api:+'
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    compile 'org.springframework:spring-test:+'
+    compile 'com.h2database:h2:+'
+    compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
+    testCompile 'junit:junit:+'
 }
 
 //uses by heroku

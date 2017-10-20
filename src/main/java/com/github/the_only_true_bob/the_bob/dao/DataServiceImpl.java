@@ -7,10 +7,12 @@ import com.github.the_only_true_bob.the_bob.dao.repositories.EventRepository;
 import com.github.the_only_true_bob.the_bob.dao.repositories.EventUserRepository;
 import com.github.the_only_true_bob.the_bob.dao.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component("dataService")
 public class DataServiceImpl implements DataService{
 
     @Autowired
