@@ -26,17 +26,11 @@ public class VkServiceImpl implements VkService {
 
     @Override
     public VkService sendMessage(final Message message) {
-        try {
-            vkApiClient
-                    .messages()
-                    .send(groupActor)
-                    .userId(Integer.parseInt(message.userId()))
-                    .message(message.text())
-                    .execute();
-        } catch (ApiException | ClientException e) {
-            //todo add loger
-            e.printStackTrace();
-        }
+        message.userId().ifPresent(
+                userId ->
+                        message.text().ifPresent(
+                                text ->
+                                        sendMessage(userId, text)));
         return this;
     }
 
@@ -52,6 +46,20 @@ public class VkServiceImpl implements VkService {
                                 .setMusic(userXtrCounters.getMusic())
                                 .build())
                 .orElse(User.empty());
+    }
+
+    private void sendMessage(String userId, String text) {
+        try {
+            vkApiClient
+                    .messages()
+                    .send(groupActor)
+                    .userId(Integer.parseInt(userId))
+                    .message(text)
+                    .execute();
+        } catch (ApiException | ClientException e) {
+            // TODO: 21/10/17 log!
+            e.printStackTrace();
+        }
     }
 
     private Optional<UserXtrCounters> getUserWithAllFields(String userVkId) {
