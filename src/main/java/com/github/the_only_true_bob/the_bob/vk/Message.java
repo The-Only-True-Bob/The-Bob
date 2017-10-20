@@ -1,5 +1,6 @@
 package com.github.the_only_true_bob.the_bob.vk;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public interface Message {
@@ -9,12 +10,101 @@ public interface Message {
 
     String text();
 
-    // TODO: 20.10.17 It must somewhat
+    // TODO: 20.10.17 It must return somewhat
     void attachments();
 
     String userId();
 
     static Message from(final JsonObject body) {
-        return null;
+        final JsonElement typeJson = body.get("type");
+        final String type = typeJson.getAsString();
+        return Type.of(type).parse(body).orElse(Message.empty());
+    }
+
+    static Message empty() {
+        return new Message() {
+            @Override
+            public Type type() {
+                return Type.UNASSIGNED;
+            }
+
+            @Override
+            public String text() {
+                return "";
+            }
+
+            @Override
+            public void attachments() {
+                //todo: Implement attachments
+            }
+
+            @Override
+            public String userId() {
+                return "UNASSIGNED";
+            }
+        };
+    }
+
+    static Builder builder() {
+        return new Builder();
+    }
+
+    class Builder {
+        private Type type;
+        private String userVkId;
+        private String text;
+        private String pollId;
+        private String optionId;
+
+        private Builder() { }
+
+        public Builder setType(Type type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setUserVkId(String userVkId) {
+            this.userVkId = userVkId;
+            return this;
+        }
+
+        public Builder setText(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public Builder setPollId(String pollId) {
+            this.pollId = pollId;
+            return this;
+        }
+
+        public Builder setOptionId(String optionId) {
+            this.optionId = optionId;
+            return this;
+        }
+
+        public Message build() {
+            return new Message() {
+                @Override
+                public Type type() {
+                    return type;
+                }
+
+                @Override
+                public String text() {
+                    return text;
+                }
+
+                @Override
+                public void attachments() {
+                    //todo: Implement attachments
+                }
+
+                @Override
+                public String userId() {
+                    return userVkId;
+                }
+            };
+        }
     }
 }
