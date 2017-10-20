@@ -1,4 +1,4 @@
-package com.github.the_only_true_bob.the_bob;
+package com.github.the_only_true_bob.the_bob.jetty;
 
 import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.github.the_only_true_bob.the_bob.vk.Message;

@@ -1,5 +1,6 @@
 package com.github.the_only_true_bob.the_bob;
 
+import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
 import org.eclipse.jetty.server.Server;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

@@ -1,6 +1,7 @@
 package com.github.the_only_true_bob.the_bob;
 
 import com.github.the_only_true_bob.the_bob.handler.Handler;
+import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.client.actors.UserActor;
