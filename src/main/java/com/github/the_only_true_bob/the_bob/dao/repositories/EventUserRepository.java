@@ -12,7 +12,5 @@ public interface EventUserRepository extends JpaRepository<EventUserEntity, Long
     EventUserEntity findById(int id);
     List<EventUserEntity> findByUser(UserEntity userEntity);
     List<EventUserEntity> findByEvent(EventEntity eventEntity);
-    EventUserEntity changeStatus(EventUserEntity eventUserEntity, String status);
-    EventUserEntity changeStage(EventUserEntity eventUserEntity, String stage);
 
 }

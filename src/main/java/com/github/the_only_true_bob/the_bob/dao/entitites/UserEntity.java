@@ -5,12 +5,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class UserEntity {
 
     private int	id;
     private String vkId;
 
-    private Set<EventUserEntity> eventUserEntitys = new HashSet<EventUserEntity>();
+    private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
 
     public UserEntity(){}
 
@@ -37,17 +38,17 @@ public class UserEntity {
         this.vkId = vkId;
     }
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "user")
     public Set<EventUserEntity> getEventUserEntity() {
-        return eventUserEntitys;
+        return eventUsers;
     }
 
     public void setEventUserEntity(final Set<EventUserEntity> eventUserEntity) {
-        this.eventUserEntitys = eventUserEntity;
+        this.eventUsers = eventUserEntity;
     }
 
     public void addUserEventEntity(EventUserEntity eventUserEntity) {
-        this.eventUserEntitys.add(eventUserEntity);
+        this.eventUsers.add(eventUserEntity);
     }
 
     @Override
@@ -59,14 +60,14 @@ public class UserEntity {
 
         if (id != that.id) return false;
         if (vkId != null ? !vkId.equals(that.vkId) : that.vkId != null) return false;
-        return eventUserEntitys != null ? eventUserEntitys.equals(that.eventUserEntitys) : that.eventUserEntitys == null;
+        return eventUsers != null ? eventUsers.equals(that.eventUsers) : that.eventUsers == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (vkId != null ? vkId.hashCode() : 0);
-        result = 31 * result + (eventUserEntitys != null ? eventUserEntitys.hashCode() : 0);
+        result = 31 * result + (eventUsers != null ? eventUsers.hashCode() : 0);
         return result;
     }
 }

@@ -39,8 +39,8 @@ public class MainTest {
         EventEntity eventEntity = new EventEntity("afisha_id");
         EventUserEntity eventUserEntity = new EventUserEntity();
 
-        eventUserEntity.setUserEntity(userEntity);
-        eventUserEntity.setEventEntity(eventEntity);
+        eventUserEntity.setUser(userEntity);
+        eventUserEntity.setEvent(eventEntity);
         eventUserEntity.setStage("stage");
         eventUserEntity.setStatus("status");
 

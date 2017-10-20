@@ -27,8 +27,6 @@ public interface DataService {
     Optional<EventUserEntity> findEventUserById(int id);
     Optional<List<EventUserEntity>> findEventsByUser(UserEntity userEntity);
     Optional<List<EventUserEntity>> findUsersByEvent(EventEntity eventEntity);
-    EventUserEntity changeEventUserStatus(EventUserEntity eventUserEntity, String status);
-    EventUserEntity changeEventUserStage(EventUserEntity eventUserEntity, String stage);
     void delete(EventUserEntity eventUserEntity);
     void deleteAllEventUsers();
 

@@ -88,16 +88,6 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
-    public EventUserEntity changeEventUserStatus(final EventUserEntity eventUserEntity, final String status) {
-        return eventUserRepository.changeStatus(eventUserEntity, status);
-    }
-
-    @Override
-    public EventUserEntity changeEventUserStage(final EventUserEntity eventUserEntity, final String stage) {
-        return eventUserRepository.changeStage(eventUserEntity, stage);
-    }
-
-    @Override
     public void delete(final EventUserEntity eventUserEntity) {
         eventUserRepository.delete(eventUserEntity);
     }

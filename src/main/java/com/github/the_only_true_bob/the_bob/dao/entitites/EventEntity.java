@@ -6,12 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "events")
 public class EventEntity {
 
     private int	id;
     private String afisha_id;
 
-    private Set<EventUserEntity> eventUserEntitys = new HashSet<EventUserEntity>();
+    private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
 
     public EventEntity(){}
 
@@ -39,17 +40,17 @@ public class EventEntity {
         this.afisha_id = afisha_id;
     }
 
-    @OneToMany(mappedBy = "eventEntity")
-    public Set<EventUserEntity> getEventUserEntitys() {
-        return eventUserEntitys;
+    @OneToMany(mappedBy = "event")
+    public Set<EventUserEntity> getEventUsers() {
+        return eventUsers;
     }
 
-    public void setEventUserEntitys(final Set<EventUserEntity> eventUserEntitys) {
-        this.eventUserEntitys = eventUserEntitys;
+    public void setEventUsers(final Set<EventUserEntity> eventUsers) {
+        this.eventUsers = eventUsers;
     }
 
     public void addEventUser(EventUserEntity eventUserEntity) {
-        this.eventUserEntitys.add(eventUserEntity);
+        this.eventUsers.add(eventUserEntity);
     }
 
     @Override
@@ -61,14 +62,14 @@ public class EventEntity {
 
         if (id != that.id) return false;
         if (afisha_id != null ? !afisha_id.equals(that.afisha_id) : that.afisha_id != null) return false;
-        return eventUserEntitys != null ? eventUserEntitys.equals(that.eventUserEntitys) : that.eventUserEntitys == null;
+        return eventUsers != null ? eventUsers.equals(that.eventUsers) : that.eventUsers == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (afisha_id != null ? afisha_id.hashCode() : 0);
-        result = 31 * result + (eventUserEntitys != null ? eventUserEntitys.hashCode() : 0);
+        result = 31 * result + (eventUsers != null ? eventUsers.hashCode() : 0);
         return result;
     }
 }

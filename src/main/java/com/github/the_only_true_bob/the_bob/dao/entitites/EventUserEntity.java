@@ -3,13 +3,16 @@ package com.github.the_only_true_bob.the_bob.dao.entitites;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "events_users")
 public class EventUserEntity {
 
     private int	id;
     private String status;
     private String stage;
-    private UserEntity userEntity;
-    private EventEntity eventEntity;
+    private UserEntity user;
+    private EventEntity event;
+
+    public EventUserEntity(){}
 
     @Id
     @GeneratedValue
@@ -39,23 +42,23 @@ public class EventUserEntity {
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "user_id")
-    public UserEntity getUserEntity() {
-        return userEntity;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserEntity(final UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(final UserEntity user) {
+        this.user = user;
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "event_id")
-    public EventEntity getEventEntity() {
-        return eventEntity;
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
+    public EventEntity getEvent() {
+        return event;
     }
 
-    public void setEventEntity(final EventEntity eventEntity) {
-        this.eventEntity = eventEntity;
+    public void setEvent(final EventEntity event) {
+        this.event = event;
     }
 
     @Override
@@ -68,8 +71,8 @@ public class EventUserEntity {
         if (id != that.id) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (stage != null ? !stage.equals(that.stage) : that.stage != null) return false;
-        if (userEntity != null ? !userEntity.equals(that.userEntity) : that.userEntity != null) return false;
-        return eventEntity != null ? eventEntity.equals(that.eventEntity) : that.eventEntity == null;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        return event != null ? event.equals(that.event) : that.event == null;
     }
 
     @Override
@@ -77,8 +80,8 @@ public class EventUserEntity {
         int result = id;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (stage != null ? stage.hashCode() : 0);
-        result = 31 * result + (userEntity != null ? userEntity.hashCode() : 0);
-        result = 31 * result + (eventEntity != null ? eventEntity.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (event != null ? event.hashCode() : 0);
         return result;
     }
 }
