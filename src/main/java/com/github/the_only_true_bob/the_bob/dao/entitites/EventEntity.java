@@ -9,7 +9,7 @@ import java.util.Set;
 @Table(name = "events")
 public class EventEntity {
 
-    private Long	id;
+    private Long id;
     private String afishaId;
     private String afishaUrl;
     private String afishaImgUrl;

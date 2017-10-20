@@ -8,8 +8,11 @@ import java.util.Set;
 @Table(name = "users")
 public class UserEntity {
 
-    private Long	id;
+    private Long id;
     private String vkId;
+    // 1-female, 2-male, 3-none
+    private String acceptableSex;
+    private Integer acceptableAgeDiff;
 
     private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
 
@@ -36,6 +39,22 @@ public class UserEntity {
 
     public void setVkId(final String vkId) {
         this.vkId = vkId;
+    }
+
+    public String getAcceptableSex() {
+        return acceptableSex;
+    }
+
+    public void setAcceptableSex(String acceptableSex) {
+        this.acceptableSex = acceptableSex;
+    }
+
+    public Integer getAcceptableAgeDiff() {
+        return acceptableAgeDiff;
+    }
+
+    public void setAcceptableAgeDiff(Integer acceptableAgeDiff) {
+        this.acceptableAgeDiff = acceptableAgeDiff;
     }
 
     @OneToMany(mappedBy = "user")

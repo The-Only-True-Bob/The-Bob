@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "events_users")
 public class EventUserEntity {
 
-    private Long	id;
+    private Long id;
     private String status;
     private String stage;
     private UserEntity user;
