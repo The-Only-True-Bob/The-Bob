@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    UserEntity findById(int id);
+
     UserEntity findByVkId(String vkId);
 
 }

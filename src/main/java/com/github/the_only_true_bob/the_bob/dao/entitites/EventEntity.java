@@ -9,35 +9,48 @@ import java.util.Set;
 @Table(name = "events")
 public class EventEntity {
 
-    private int	id;
-    private String afisha_id;
+    private Long	id;
+    private String afishaId;
+    private String afishaUrl;
+    private String afishaImgUrl;
+    private String date;
+    private String placeName;
+    private String placeAddress;
+    private String type;
+    private String name;
 
     private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
 
     public EventEntity(){}
 
-    public EventEntity(final String afisha_id) {
-        this.afisha_id = afisha_id;
+    public EventEntity(final String afishaId, final String afishaUrl, final String afishaImgUrl, final String date, final String placeName, final String placeAddress, final String type, final String name) {
+        this.afishaId = afishaId;
+        this.afishaUrl = afishaUrl;
+        this.afishaImgUrl = afishaImgUrl;
+        this.date = date;
+        this.placeName = placeName;
+        this.placeAddress = placeAddress;
+        this.type = type;
+        this.name = name;
     }
-
 
     @Id
     @GeneratedValue
     @Column(name = "event_id")
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
-    public String getAfisha_id() {
-        return afisha_id;
+    public String getAfishaId() {
+        return afishaId;
     }
 
-    public void setAfisha_id(final String afisha_id) {
-        this.afisha_id = afisha_id;
+    public void setAfishaId(final String afishaId) {
+        this.afishaId = afishaId;
     }
 
     @OneToMany(mappedBy = "event")
@@ -53,6 +66,62 @@ public class EventEntity {
         this.eventUsers.add(eventUserEntity);
     }
 
+    public String getAfishaUrl() {
+        return afishaUrl;
+    }
+
+    public void setAfishaUrl(final String afishaUrl) {
+        this.afishaUrl = afishaUrl;
+    }
+
+    public String getAfishaImgUrl() {
+        return afishaImgUrl;
+    }
+
+    public void setAfishaImgUrl(final String afishaImgUrl) {
+        this.afishaImgUrl = afishaImgUrl;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(final String date) {
+        this.date = date;
+    }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(final String placeName) {
+        this.placeName = placeName;
+    }
+
+    public String getPlaceAddress() {
+        return placeAddress;
+    }
+
+    public void setPlaceAddress(final String placeAddress) {
+        this.placeAddress = placeAddress;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -60,15 +129,29 @@ public class EventEntity {
 
         final EventEntity that = (EventEntity) o;
 
-        if (id != that.id) return false;
-        if (afisha_id != null ? !afisha_id.equals(that.afisha_id) : that.afisha_id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (afishaId != null ? !afishaId.equals(that.afishaId) : that.afishaId != null) return false;
+        if (afishaUrl != null ? !afishaUrl.equals(that.afishaUrl) : that.afishaUrl != null) return false;
+        if (afishaImgUrl != null ? !afishaImgUrl.equals(that.afishaImgUrl) : that.afishaImgUrl != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (placeName != null ? !placeName.equals(that.placeName) : that.placeName != null) return false;
+        if (placeAddress != null ? !placeAddress.equals(that.placeAddress) : that.placeAddress != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         return eventUsers != null ? eventUsers.equals(that.eventUsers) : that.eventUsers == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (afisha_id != null ? afisha_id.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (afishaId != null ? afishaId.hashCode() : 0);
+        result = 31 * result + (afishaUrl != null ? afishaUrl.hashCode() : 0);
+        result = 31 * result + (afishaImgUrl != null ? afishaImgUrl.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (placeName != null ? placeName.hashCode() : 0);
+        result = 31 * result + (placeAddress != null ? placeAddress.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (eventUsers != null ? eventUsers.hashCode() : 0);
         return result;
     }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "events_users")
 public class EventUserEntity {
 
-    private int	id;
+    private Long	id;
     private String status;
     private String stage;
     private UserEntity user;
@@ -17,11 +17,11 @@ public class EventUserEntity {
     @Id
     @GeneratedValue
     @Column(name = "event_user_id")
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -68,7 +68,7 @@ public class EventUserEntity {
 
         final EventUserEntity that = (EventUserEntity) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (stage != null ? !stage.equals(that.stage) : that.stage != null) return false;
         if (user != null ? !user.equals(that.user) : that.user != null) return false;
@@ -77,7 +77,7 @@ public class EventUserEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (stage != null ? stage.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);

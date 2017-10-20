@@ -33,9 +33,10 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
-    public Optional<UserEntity> findUserById(final int id) {
-        return Optional.ofNullable(userRepository.findById(id));
+    public Optional<UserEntity> findUserById(final Long id) {
+        return userRepository.findById(id);
     }
+
 
     @Override
     public void delete(final UserEntity userEntity) {
@@ -53,9 +54,10 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
-    public Optional<EventEntity> findEventById(final int id) {
-        return Optional.ofNullable(eventRepository.findById(id));
+    public Optional<EventEntity> findEventById(final Long id) {
+        return eventRepository.findById(id);
     }
+
 
     @Override
     public void delete(final EventEntity eventEntity) {
@@ -73,18 +75,18 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
-    public Optional<EventUserEntity> findEventUserById(final int id) {
-        return Optional.ofNullable(eventUserRepository.findById(id));
+    public Optional<EventUserEntity> findEventUserById(final Long id) {
+        return eventUserRepository.findById(id);
     }
 
     @Override
-    public Optional<List<EventUserEntity>> findEventsByUser(final UserEntity userEntity) {
-        return Optional.ofNullable(eventUserRepository.findByUser(userEntity));
+    public List<EventUserEntity> findEventsByUser(final UserEntity userEntity) {
+        return eventUserRepository.findByUser(userEntity);
     }
 
     @Override
-    public Optional<List<EventUserEntity>> findUsersByEvent(final EventEntity eventEntity) {
-        return Optional.ofNullable(eventUserRepository.findByEvent(eventEntity));
+    public List<EventUserEntity> findUsersByEvent(final EventEntity eventEntity) {
+        return eventUserRepository.findByEvent(eventEntity);
     }
 
     @Override

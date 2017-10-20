@@ -14,6 +14,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.transaction.Transactional;
+
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,10 +38,15 @@ public class MainTest {
     }
 
     @Test
+    @Transactional
     public void dataBaseTest() throws Exception{
         UserEntity userEntity = new UserEntity("123456");
-        EventEntity eventEntity = new EventEntity("afisha_id");
+        EventEntity eventEntity = new EventEntity("afishaId","url","img","date","placeName","placeAddress","type","name");
         EventUserEntity eventUserEntity = new EventUserEntity();
+
+        userRepository.save(userEntity);
+        eventRepository.save(eventEntity);
+
 
         eventUserEntity.setUser(userEntity);
         eventUserEntity.setEvent(eventEntity);
@@ -46,9 +55,18 @@ public class MainTest {
 
         eventUserRepository.save(eventUserEntity);
 
-        UserEntity user1 = dataService.findUserById(1).get();
 
-        assertEquals("123456", userEntity.getVkId());
+     //   final EventUserEntity savedEventUser = eventUserRepository.save(eventUserEntity);
+     //   System.out.println(savedEventUser.getId());
+//
+//      //  UserEntity user1 = dataService.findUserById(1L).get();
+//        EventEntity event1 = dataService.findEventById(2L).get();
+//
+        List<EventUserEntity> eventUserEntity1 = dataService.findUsersByEvent(eventEntity);
+        System.out.println(eventUserEntity1);
+
+//        //assertEquals("123456", user1.getVkId());
+//        assertEquals("afisha_id",event1.getAfishaId());
     }
 
 }
