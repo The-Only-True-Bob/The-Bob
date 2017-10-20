@@ -10,7 +10,9 @@ public class Main {
         final int port = 8080 /*Integer.parseInt(System.getenv("PORT"))*/;
 
         final Server server = new Server(port);
-        final JettyHandler jettyHandler = (JettyHandler) new AnnotationConfigApplicationContext(ApplicationConfiguration.class).getBean("jettyHandler");
+        final JettyHandler jettyHandler =
+                new AnnotationConfigApplicationContext(ApplicationConfiguration.class)
+                        .getBean("jettyHandler", JettyHandler.class);
         server.setHandler(jettyHandler);
 
         server.start();
