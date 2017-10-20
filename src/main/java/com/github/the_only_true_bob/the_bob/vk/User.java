@@ -1,13 +1,18 @@
 package com.github.the_only_true_bob.the_bob.vk;
 
+import java.util.Optional;
+
 public class User {
+    // 1-female, 2-male, 3-none
+    private String sex;
     private String about;
     private String birthday;
     private String city;
     private String homeTown;
     private String music;
 
-    private User(String about, String birthday, String city, String homeTown, String music) {
+    private User(String sex, String about, String birthday, String city, String homeTown, String music) {
+        this.sex = sex;
         this.about = about;
         this.birthday = birthday;
         this.city = city;
@@ -25,33 +30,43 @@ public class User {
         return new User();
     }
 
-    public String getAbout() {
-        return about;
+    public Optional<String> sex() {
+        return Optional.ofNullable(sex);
     }
 
-    public String getBirthday() {
-        return birthday;
+    public Optional<String> about() {
+        return Optional.ofNullable(about);
     }
 
-    public String getCity() {
-        return city;
+    public Optional<String> birthday() {
+        return Optional.ofNullable(birthday);
     }
 
-    public String getHomeTown() {
-        return homeTown;
+    public Optional<String> city() {
+        return Optional.ofNullable(city);
     }
 
-    public String getMusic() {
-        return music;
+    public Optional<String> homeTown() {
+        return Optional.ofNullable(homeTown);
+    }
+
+    public Optional<String> music() {
+        return Optional.ofNullable(music);
     }
 
     public static class Builder {
 
+        private String sex;
         private String about;
         private String birthday;
         private String city;
         private String homeTown;
         private String music;
+
+        public Builder setSex(String sex) {
+            this.sex = sex;
+            return this;
+        }
 
         public Builder setAbout(String about) {
             this.about = about;
@@ -79,7 +94,7 @@ public class User {
         }
 
         public User build() {
-            return new User(about, birthday, city, homeTown, music);
+            return new User(sex, about, birthday, city, homeTown, music);
         }
     }
 }

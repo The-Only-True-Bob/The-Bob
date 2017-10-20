@@ -67,6 +67,7 @@ public class ApplicationConfiguration {
     @Bean
     public List<UserField> userFields() {
         return Stream.of(
+                UserField.SEX,
                 UserField.ABOUT,
                 UserField.ACTIVITIES,
                 UserField.BDATE,

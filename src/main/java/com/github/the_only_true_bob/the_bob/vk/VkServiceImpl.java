@@ -39,6 +39,7 @@ public class VkServiceImpl implements VkService {
         return getUserWithAllFields(userVkId)
                 .map(userXtrCounters ->
                         User.builder()
+                                .setSex(userXtrCounters.getSex().getValue().toString())
                                 .setAbout(userXtrCounters.getAbout())
                                 .setBirthday(userXtrCounters.getBdate())
                                 .setCity(userXtrCounters.getCity().getTitle())
@@ -73,7 +74,7 @@ public class VkServiceImpl implements VkService {
                             .execute()
                             .get(0));
         } catch (ApiException | ClientException e) {
-            //todo add loger
+            // TODO: 21/10/17 log!
             e.printStackTrace();
         }
         return Optional.empty();
