@@ -3,12 +3,7 @@ package com.github.the_only_true_bob.the_bob.vk;
 import java.util.Optional;
 
 public interface Attachment {
-    static Builder builder() {
-        return new Builder();
-    }
-
     AttachmentType type();
-
     Optional<String> audioArtist();
 
     static Attachment empty() {
@@ -23,6 +18,10 @@ public interface Attachment {
                 return Optional.empty();
             }
         };
+    }
+
+    static Builder builder() {
+        return new Builder();
     }
 
     class Builder {

@@ -5,7 +5,7 @@ import com.github.the_only_true_bob.the_bob.vk.Message;
 import java.util.function.Consumer;
 
 public interface Handler extends Consumer<Message> {
-    void accept(final Message message);
+    void accept(final Message inMessage);
 
     static Handler bob() {
         return new BobHandler() {};

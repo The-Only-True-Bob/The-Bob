@@ -1,6 +1,7 @@
 package com.github.the_only_true_bob.the_bob;
 
 import com.github.the_only_true_bob.the_bob.handler.Handler;
+import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -8,10 +9,12 @@ import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.queries.users.UserField;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -24,6 +27,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -69,6 +73,26 @@ public class ApplicationConfiguration {
                 UserField.HOME_TOWN,
                 UserField.MUSIC)
                 .collect(toList());
+    }
+
+    @Bean
+    public MessageProvider messageProvider() {
+        final MessageSource messageSource = messageSource();
+        final Locale locale = locale();
+        return (s, objects) -> messageSource.getMessage(s, objects, locale);
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasename("message-templates");
+        return messageSource;
+    }
+
+    @Bean
+    public Locale locale() {
+        return Locale.forLanguageTag("ru");
     }
 
     @Bean
