@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -30,9 +31,9 @@ public enum MessageType {
             final JsonArray attachmentsJson = objectJson.get("attachments").getAsJsonArray();
             final List<Attachment> attachments = StreamSupport.stream(attachmentsJson.spliterator(), false)
                     .map(JsonElement::getAsJsonObject)
-                    .map(attachment -> {
+                    .flatMap(attachment -> {
                         final String type = attachment.get("type").getAsString();
-                        return AttachmentType.of(type).parse(attachment).orElse(Attachment.empty());
+                        return AttachmentType.of(type).parse(attachment).orElseGet(Collections::emptyList).stream();
                     })
                     .collect(toList());
             return Optional.ofNullable(
@@ -56,7 +57,8 @@ public enum MessageType {
         this.string = string;
     }
 
-    public String asString() {
+    @Override
+    public String toString() {
         return string;
     }
 
@@ -67,9 +69,9 @@ public enum MessageType {
     }
 
     public static MessageType of(String type) {
-        if (type.equals(POLL.asString())) {
+        if (type.equals(POLL.toString())) {
             return POLL;
-        } else if (type.equals(MESSAGE.asString())) {
+        } else if (type.equals(MESSAGE.toString())) {
             return MESSAGE;
         }
         return UNASSIGNED;

@@ -1,21 +1,33 @@
 package com.github.the_only_true_bob.the_bob.vk;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 public enum AttachmentType {
     AUDIO("audio") {
         @Override
-        public Optional<Attachment> parse(JsonObject attachment) {
-            // TODO: 20/10/17 implement
-            return Optional.empty();
+        public Optional<List<Attachment>> parse(JsonObject attachment) {
+            return Optional.ofNullable(
+                    StreamSupport.stream(attachment.get("audio").getAsJsonArray().spliterator(), false)
+                            .map(JsonElement::getAsJsonObject)
+                            .map(object ->
+                                    Attachment.builder()
+                                            .setType(this)
+                                            .setAudioArtist(object.get("artist").getAsString())
+                                            .build())
+                            .collect(toList()));
         }
     },
 
     UNASSIGNED("UNASSIGNED") {
         @Override
-        public Optional<Attachment> parse(JsonObject attachment) {
+        public Optional<List<Attachment>> parse(JsonObject attachment) {
             return Optional.empty();
         }
     };
@@ -27,15 +39,16 @@ public enum AttachmentType {
     }
 
     public static AttachmentType of(String type) {
-        if (type.equals(AUDIO.asString())) {
+        if (type.equals(AUDIO.toString())) {
             return AUDIO;
         }
         return UNASSIGNED;
     }
 
-    private String asString() {
+    @Override
+    public String toString() {
         return string;
     }
 
-    abstract public Optional<Attachment> parse(JsonObject attachment);
+    abstract public Optional<List<Attachment>> parse(JsonObject attachment);
 }

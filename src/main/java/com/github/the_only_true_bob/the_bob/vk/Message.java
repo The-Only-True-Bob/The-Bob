@@ -3,19 +3,17 @@ package com.github.the_only_true_bob.the_bob.vk;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public interface Message {
-    // TODO: 20.10.17 Figure out how it should work and what it must consist
-
     MessageType type();
-
-    String text();
-
-    // TODO: 20.10.17 It must return somewhat
-    void attachments();
-
-    String userId();
+    Optional<String> text();
+    Optional<String> pollId();
+    Optional<String> optionId();
+    List<Attachment> attachments();
+    Optional<String> userId();
 
     static Message from(final JsonObject body) {
         final JsonElement typeJson = body.get("type");
@@ -31,18 +29,28 @@ public interface Message {
             }
 
             @Override
-            public String text() {
-                return "";
+            public Optional<String> text() {
+                return Optional.empty();
             }
 
             @Override
-            public void attachments() {
-                //todo: Implement attachments
+            public Optional<String> pollId() {
+                return Optional.empty();
             }
 
             @Override
-            public String userId() {
-                return "UNASSIGNED";
+            public Optional<String> optionId() {
+                return Optional.empty();
+            }
+
+            @Override
+            public List<Attachment> attachments() {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public Optional<String> userId() {
+                return Optional.empty();
             }
         };
     }
@@ -99,18 +107,28 @@ public interface Message {
                 }
 
                 @Override
-                public String text() {
-                    return text;
+                public Optional<String> text() {
+                    return Optional.ofNullable(text);
                 }
 
                 @Override
-                public void attachments() {
-                    //todo: Implement attachments
+                public Optional<String> pollId() {
+                    return Optional.ofNullable(pollId);
                 }
 
                 @Override
-                public String userId() {
-                    return userVkId;
+                public Optional<String> optionId() {
+                    return Optional.ofNullable(optionId);
+                }
+
+                @Override
+                public List<Attachment> attachments() {
+                    return Optional.ofNullable(attachments).orElseGet(Collections::emptyList);
+                }
+
+                @Override
+                public Optional<String> userId() {
+                    return Optional.ofNullable(userVkId);
                 }
             };
         }
