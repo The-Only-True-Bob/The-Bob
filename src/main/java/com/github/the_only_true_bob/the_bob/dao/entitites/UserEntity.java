@@ -11,8 +11,8 @@ public class UserEntity {
     private Long id;
     private String vkId;
     // 1-female, 2-male, 3-none
-    private String acceptableSex;
-    private Integer acceptableAgeDiff;
+    private String acceptableSex = "3";
+    private Integer acceptableAgeDiff = 5;
 
     private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
 
@@ -45,7 +45,7 @@ public class UserEntity {
         return acceptableSex;
     }
 
-    public void setAcceptableSex(String acceptableSex) {
+    public void setAcceptableSex(final String acceptableSex) {
         this.acceptableSex = acceptableSex;
     }
 
@@ -53,7 +53,7 @@ public class UserEntity {
         return acceptableAgeDiff;
     }
 
-    public void setAcceptableAgeDiff(Integer acceptableAgeDiff) {
+    public void setAcceptableAgeDiff(final Integer acceptableAgeDiff) {
         this.acceptableAgeDiff = acceptableAgeDiff;
     }
 
@@ -66,7 +66,7 @@ public class UserEntity {
         this.eventUsers = eventUserEntity;
     }
 
-    public void addUserEventEntity(EventUserEntity eventUserEntity) {
+    public void addUserEventEntity(final EventUserEntity eventUserEntity) {
         this.eventUsers.add(eventUserEntity);
     }
 

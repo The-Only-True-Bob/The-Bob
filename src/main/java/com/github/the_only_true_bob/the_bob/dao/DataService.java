@@ -4,7 +4,6 @@ import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventUserEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.UserEntity;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
