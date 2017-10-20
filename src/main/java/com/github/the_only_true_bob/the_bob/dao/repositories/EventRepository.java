@@ -4,4 +4,7 @@ import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
+
+    EventEntity findById(int id);
+
 }

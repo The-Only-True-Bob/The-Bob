@@ -11,7 +11,7 @@ public interface DataService {
 
     //UserEntity
     UserEntity saveUser(UserEntity userEntity);
-    Optional<UserEntity> findUserByVkId(int vkId);
+    Optional<UserEntity> findUserByVkId(String vkId);
     Optional<UserEntity> findUserById(int id);
     void delete(UserEntity userEntity);
     void deleteAllUsers();
@@ -29,7 +29,7 @@ public interface DataService {
     Optional<List<EventUserEntity>> findUsersByEvent(EventEntity eventEntity);
     EventUserEntity changeEventUserStatus(EventUserEntity eventUserEntity, String status);
     EventUserEntity changeEventUserStage(EventUserEntity eventUserEntity, String stage);
-    EventUserEntity delete(EventUserEntity eventUserEntity);
+    void delete(EventUserEntity eventUserEntity);
     void deleteAllEventUsers();
 
 }
