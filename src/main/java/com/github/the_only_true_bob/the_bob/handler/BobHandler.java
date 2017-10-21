@@ -7,7 +7,7 @@ import com.github.the_only_true_bob.the_bob.vk.VkService;
 import com.github.the_only_true_bob.the_bob.vk.polls.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 class BobHandler implements Handler {
 
@@ -18,7 +18,7 @@ class BobHandler implements Handler {
     @Autowired
     private MessageProvider messageProvider;
     @Autowired
-    private Stream<Poll> polls;
+    private List<Poll> polls;
 
     @Override
     public void accept(Message message) {
@@ -48,7 +48,7 @@ class BobHandler implements Handler {
                 // TODO: 21/10/17 add more sence
                 message.userId().ifPresent(userId -> {
                     message.pollId()
-                            .flatMap(pollId -> polls
+                            .flatMap(pollId -> polls.stream()
                                     .filter(poll -> pollId.equals(poll.id()))
                                     .findFirst())
                             .ifPresent(poll -> poll.handle(message));
@@ -58,9 +58,8 @@ class BobHandler implements Handler {
                             .build());
                 });
                 break;
-            default:
-                message.userId()
-                        .ifPresent(userId ->
+            case UNASSIGNED:
+                message.userId().ifPresent(userId ->
                                 vkService.sendMessage(Message.builder()
                                         .setText(messageProvider.get("error.answer"))
                                         .setUserVkId(userId)

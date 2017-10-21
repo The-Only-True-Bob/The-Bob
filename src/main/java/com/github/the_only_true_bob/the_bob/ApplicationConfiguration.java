@@ -66,8 +66,8 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public Stream<Poll> polls() {
-        return Stream.of(agePoll(), sexPoll());
+    public List<Poll> polls() {
+        return Stream.of(agePoll(), sexPoll()).collect(toList());
     }
 
     @Bean

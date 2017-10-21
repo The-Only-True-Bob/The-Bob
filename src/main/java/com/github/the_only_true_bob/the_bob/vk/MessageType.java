@@ -89,6 +89,7 @@ public enum MessageType {
     }
 
     public static MessageType of(final String type) {
+        System.out.println(type);
         return Arrays.stream(values())
                      .filter(messageType -> messageType.toString().equals(type))
                      .findFirst()
