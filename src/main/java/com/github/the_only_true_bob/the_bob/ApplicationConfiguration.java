@@ -39,7 +39,6 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -100,11 +99,6 @@ public class ApplicationConfiguration {
     @Bean
     public BobCommand suggestCommand() {
         return new SuggestCommand();
-    }
-
-    @Bean
-    public SessionContainer sessionContainer() {
-        return new SessionContainer();
     }
 
     @Bean
@@ -187,10 +181,6 @@ public class ApplicationConfiguration {
         dataSource.setUrl(databaseUrl);
         dataSource.setUsername(databaseUser);
         dataSource.setPassword(databasePassword);
-        Properties properties = new Properties();
-        properties.put("useUnicode", "true");
-        properties.put("characterEncoding", "utf-8");
-        dataSource.setConnectionProperties(properties);
         return dataSource;
     }
 
