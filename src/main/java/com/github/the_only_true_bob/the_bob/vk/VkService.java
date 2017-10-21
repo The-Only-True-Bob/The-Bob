@@ -9,7 +9,4 @@ public interface VkService {
 
     User getUser(String userVkId);
     List<User> getUsers(List<String> userIds);
-    default User getUser(UserEntity userEntity) {
-        return getUser(userEntity.getVkId());
-    }
 }

@@ -13,6 +13,7 @@ public class User {
     private String firstName;
     private String lastName;
     private List<User> friends;
+    private List<Group> groups;
     private String sex;
     private String about;
     private String birthday;
@@ -20,11 +21,12 @@ public class User {
     private String homeTown;
     private List<String> music;
 
-    private User(final String vkId, final String firstName, final String lastName, final List<User> friends, final String sex, final String about, final String birthday, final String city, final String homeTown, final List<String> music) {
+    private User(final String vkId, final String firstName, final String lastName, final List<User> friends, final List<Group> groups, final String sex, final String about, final String birthday, final String city, final String homeTown, final List<String> music) {
         this.vkId = vkId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.friends = friends;
+        this.groups = groups;
         this.sex = sex;
         this.about = about;
         this.birthday = birthday;
@@ -58,6 +60,10 @@ public class User {
 
     public List<User> friends() {
         return Optional.ofNullable(friends).orElseGet(Collections::emptyList);
+    }
+
+    public List<Group> groups() {
+        return Optional.ofNullable(groups).orElseGet(Collections::emptyList);
     }
 
     public Optional<String> sex() {
@@ -96,6 +102,7 @@ public class User {
         private String firstName;
         private String lastName;
         private List<User> friends;
+        private List<Group> groups;
 
         public Builder setVkId(final String vkId) {
             this.vkId = vkId;
@@ -114,6 +121,11 @@ public class User {
 
         public Builder setFriends(final List<User> friends) {
             this.friends = friends;
+            return this;
+        }
+
+        public Builder setGroups(final List<Group> groups) {
+            this.groups = groups;
             return this;
         }
 
@@ -151,7 +163,7 @@ public class User {
         }
 
         public User build() {
-            return new User(vkId, firstName, lastName, friends, sex, about, birthday, city, homeTown, music);
+            return new User(vkId, firstName, lastName, friends, groups, sex, about, birthday, city, homeTown, music);
         }
     }
 

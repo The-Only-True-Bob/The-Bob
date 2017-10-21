@@ -104,13 +104,15 @@ public class VkServiceImpl implements VkService {
     }
 
     private User toUser(UserXtrCounters userXtrCounters) {
-        final List<User> friendsIds = getFriends(userXtrCounters);
+        final List<User> friends = getFriends(userXtrCounters);
+        final List<Group> groups = getGroups(userXtrCounters);
 
         return User.builder()
                 .setVkId(String.valueOf(userXtrCounters.getId()))
                 .setFirstName(userXtrCounters.getFirstName())
                 .setLastName(userXtrCounters.getLastName())
-                .setFriends(friendsIds)
+                .setFriends(friends)
+                .setGroups(groups)
                 .setSex(userXtrCounters.getSex().getValue().toString())
                 .setAbout(userXtrCounters.getAbout())
                 .setBirthday(userXtrCounters.getBdate())
@@ -118,6 +120,37 @@ public class VkServiceImpl implements VkService {
                 .setHomeTown(userXtrCounters.getHomeTown())
                 .setMusic(userXtrCounters.getMusic())
                 .build();
+    }
+
+    private List<Group> getGroups(final UserXtrCounters userXtrCounters) {
+//        try {
+//            final List<Integer> friendsIds =
+//                    vkApiClient
+//                            .groups()
+//                            .get(serviceActor)
+//                            .userId(userXtrCounters.getId())
+//                            .execute()
+//                            .getItems();
+//
+//            return vkApiClient
+//                    .users()
+//                    .get(userActor)
+//                    .userIds(friendsIds.stream()
+//                            .map(String::valueOf)
+//                            .collect(toList()))
+//                    .execute().stream()
+//                    .map(friendXtrCounters ->
+//                            User.builder()
+//                                    .setVkId(String.valueOf(friendXtrCounters.getId()))
+//                                    .setFirstName(friendXtrCounters.getFirstName())
+//                                    .setLastName(friendXtrCounters.getLastName())
+//                                    .build())
+//                    .collect(toList());
+//        } catch (ApiException | ClientException e) {
+//            // TODO: 21/10/17 log!
+//            e.printStackTrace();
+//        }
+        return Collections.emptyList();
     }
 
     private List<User> getFriends(final UserXtrCounters userXtrCounters) {
