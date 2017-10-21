@@ -24,7 +24,7 @@ task buildWithoutTests() {
     }
 }
 
-task populateConfig(type :Exec) {
+task populateConfig(type: Exec) {
     commandLine 'sh', './configure.sh'
 }
 
