@@ -2,21 +2,18 @@ package com.github.the_only_true_bob.the_bob.matcher;
 
 import com.github.the_only_true_bob.the_bob.Main;
 import com.github.the_only_true_bob.the_bob.dao.DataService;
+import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
+import com.github.the_only_true_bob.the_bob.dao.entitites.EventUserEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.UserEntity;
-import com.github.the_only_true_bob.the_bob.matcher.criterias.CriteriaValue;
-import com.github.the_only_true_bob.the_bob.matcher.criterias.FriendsCriteria;
-import com.github.the_only_true_bob.the_bob.matcher.criterias.MusicCriteria;
-import com.github.the_only_true_bob.the_bob.matcher.criterias.PlacesCriteria;
+import com.github.the_only_true_bob.the_bob.matcher.criterias.*;
 import com.github.the_only_true_bob.the_bob.vk.User;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class UserMatch {
     private final static AnnotationConfigApplicationContext context = Main.context;
@@ -24,6 +21,7 @@ public class UserMatch {
     private final static MusicCriteria musicCriteria = () -> 10;
     private final static PlacesCriteria placesCriteria = () -> 100;
     private final static FriendsCriteria friendsCriteria = () -> 1000;
+    private final static SameEventCriteria sameEventCriteria = SameEventCriteria.with(dataService, 500);
     private final CommunicativePair pair;
     private final List<CriteriaValue> criteriaValues;
 
@@ -51,7 +49,8 @@ public class UserMatch {
         return Arrays.asList(
                 friendsCriteria.calc(parameterObject),
                 musicCriteria.calc(parameterObject),
-                placesCriteria.calc(parameterObject));
+                placesCriteria.calc(parameterObject),
+                sameEventCriteria.calc(parameterObject));
     }
 
     private static boolean isPairSexValid(final MatchingParameterObject parameterObject) {
