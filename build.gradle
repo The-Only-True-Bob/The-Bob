@@ -13,7 +13,7 @@ dependencies {
     compile 'org.springframework.data:spring-data-jpa:2.0.0.RELEASE'
     compile 'javax:javaee-api:+'
     compile 'org.springframework:spring-test:+'
-    compile 'com.h2database:h2:+'
+    compile 'mysql:mysql-connector-java:+'
     compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
     testCompile 'junit:junit:+'
 }
