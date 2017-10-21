@@ -10,8 +10,12 @@ import com.vk.api.sdk.queries.users.UserField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Component("vkService")
 public class VkServiceImpl implements VkService {
@@ -37,16 +41,15 @@ public class VkServiceImpl implements VkService {
     @Override
     public User getUser(final String userVkId) {
         return getUserWithAllFields(userVkId)
-                .map(userXtrCounters ->
-                        User.builder()
-                                .setSex(userXtrCounters.getSex().getValue().toString())
-                                .setAbout(userXtrCounters.getAbout())
-                                .setBirthday(userXtrCounters.getBdate())
-                                .setCity(userXtrCounters.getCity().getTitle())
-                                .setHomeTown(userXtrCounters.getHomeTown())
-                                .setMusic(userXtrCounters.getMusic())
-                                .build())
+                .map(this::toUser)
                 .orElse(User.empty());
+    }
+
+    @Override
+    public List<User> getUsers(List<String> userIds) {
+        return getUsersWithAllFields(userIds).stream()
+                .map(this::toUser)
+                .collect(toList());
     }
 
     private void sendMessage(String userId, String text) {
@@ -61,6 +64,24 @@ public class VkServiceImpl implements VkService {
             // TODO: 21/10/17 log!
             e.printStackTrace();
         }
+    }
+
+    private List<UserXtrCounters> getUsersWithAllFields(List<String> userIds) {
+        try {
+            return
+                    Optional.ofNullable(
+                            vkApiClient
+                                    .users()
+                                    .get(userActor)
+                                    .userIds(userIds)
+                                    .fields(allFields)
+                                    .execute())
+                            .orElseGet(Collections::emptyList);
+        } catch (ApiException | ClientException e) {
+            // TODO: 21/10/17 log!
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
     private Optional<UserXtrCounters> getUserWithAllFields(String userVkId) {
@@ -78,5 +99,16 @@ public class VkServiceImpl implements VkService {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    private User toUser(UserXtrCounters userXtrCounters) {
+        return User.builder()
+                .setSex(userXtrCounters.getSex().getValue().toString())
+                .setAbout(userXtrCounters.getAbout())
+                .setBirthday(userXtrCounters.getBdate())
+                .setCity(userXtrCounters.getCity().getTitle())
+                .setHomeTown(userXtrCounters.getHomeTown())
+                .setMusic(userXtrCounters.getMusic())
+                .build();
     }
 }
