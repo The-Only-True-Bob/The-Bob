@@ -9,7 +9,8 @@ import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.vk.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SuggestCommand implements BobCommand {
 
@@ -22,49 +23,30 @@ public class SuggestCommand implements BobCommand {
 
     @Override
     public Message handleMessage(final Message message) {
-        final List<EventEntity> eventEntities = finder.suggestEventsFor(message);
-        if (eventEntities.isEmpty()) {
-            return Message.builder()
-                    .setUserVkId(message.userId().get())
-                    .setText(messageProvider.get("event.not_found"))
-                    .build();
-        } else {
-            final int[] num = {1};
-            eventEntities.stream()
-                    .map(eventEntity -> {
-                        final EventUserEntity eventUserEntity = new EventUserEntity();
-                        eventUserEntity.setEvent(eventEntity);
-                        eventUserEntity.setUser(
-                                dataService
-                                        .findUserByVkId(message.userId().get()).get());
-                        eventUserEntity.setNumber(num[0]);
-                        eventUserEntity.setStatus(CommandStatus.LISTED);
-                        num[0]++;
-                        return eventUserEntity;
-                    })
-                    .forEach(dataService::saveEventUser);
-
-            final StringBuilder sb =
-                    new StringBuilder()
-                            .append(messageProvider.get("event.proposal.intro", eventEntities.size()));
-
-            for (int i = 0; i < eventEntities.size(); i++) {
-                final EventEntity eventEntity = eventEntities.get(i);
-                sb.append(messageProvider.get("event.proposal.event",
-                        i,
-                        eventEntity.getType(),
-                        eventEntity.getName(),
-                        eventEntity.getDate(),
-                        eventEntity.getPlaceName(),
-                        eventEntity.getPlaceAddress(),
-                        eventEntity.getAfishaUrl(),
-                        eventEntity.getAfishaImgUrl()));
-            }
-
-            return Message.builder()
-                    .setUserVkId(message.userId().get())
-                    .setText(sb.toString())
-                    .build();
-        }
+        final Stream<EventEntity> eventEntities = finder.suggestEventsFor(message);
+        String userId = message.userId().get();
+        final Message.Builder builder = Message.builder().setUserVkId(userId);
+        final int[] num = {1};
+        final String suggestions = eventEntities
+                .map(eventEntity -> {
+                    final EventUserEntity eventUserEntity = new EventUserEntity();
+                    eventUserEntity.setEvent(eventEntity);
+                    eventUserEntity.setUser(dataService.findUserByVkId(userId).get());
+                    eventUserEntity.setNumber(num[0]);
+                    eventUserEntity.setStatus(CommandStatus.LISTED);
+                    dataService.saveEventUser(eventUserEntity);
+                    return messageProvider.get("event.proposal.event",
+                            num[0]++,
+                            eventEntity.getType(),
+                            eventEntity.getName(),
+                            eventEntity.getDate(),
+                            eventEntity.getPlaceName(),
+                            eventEntity.getPlaceAddress(),
+                            eventEntity.getAfishaUrl(),
+                            eventEntity.getAfishaImgUrl());
+                })
+                .collect(Collectors.joining());
+        final String response = suggestions.isEmpty() ? messageProvider.get("event.not_found") : suggestions;
+        return builder.setText(response).build();
     }
 }
