@@ -47,26 +47,27 @@ public enum MessageType {
                     .map(object -> {
                         builder.setUserVkId(stringFromJson(object, "user_id"))
                                .setText(stringFromJson(object, "body"));
-                        return object.get("attachments");
+                        Optional.ofNullable(object.get("attachments"))
+                                .ifPresent(attachments -> {
+                                    final List<Attachment> attachmentList =
+                                            stream(attachments.getAsJsonArray().spliterator(), false)
+                                                    .map(JsonElement::getAsJsonObject)
+                                                    .flatMap(attachment ->
+                                                            Optional.ofNullable(attachment.get("type"))
+                                                                    .map(JsonElement::getAsString)
+                                                                    .flatMap(type ->
+                                                                            AttachmentType.of(type)
+                                                                                    .parse(attachment)
+                                                                                    .map(List::stream)
+                                                                    )
+                                                                    .orElseGet(Stream::empty)
+                                                    )
+                                                    .collect(toList());
+                                    builder.setAttachments(attachmentList);
+                                });
+                        return builder;
                     })
-                    .map(attachments -> {
-                        final List<Attachment> attachmentList =
-                                stream(attachments.getAsJsonArray().spliterator(), false)
-                                        .map(JsonElement::getAsJsonObject)
-                                        .flatMap(attachment ->
-                                                Optional.ofNullable(attachment.get("type"))
-                                                        .map(JsonElement::getAsString)
-                                                        .flatMap(type ->
-                                                                AttachmentType.of(type)
-                                                                              .parse(attachment)
-                                                                              .map(List::stream)
-                                                        )
-                                                        .orElseGet(Stream::empty)
-                                        )
-                                        .collect(toList());
-                                return builder.setAttachments(attachmentList).build();
-                            }
-                    );
+                    .map(Message.Builder::build);
         }
     },
 
