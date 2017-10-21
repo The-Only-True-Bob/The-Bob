@@ -124,7 +124,6 @@ public class AfishaParser implements Afisha {
                 eventEntity.setAfishaImgUrl(imgUrl);
 
                 eventsEntityTmp.add(eventEntity);
-                System.out.println("parseXML: " + i);
             }
         } catch (XPathExpressionException e) {e.printStackTrace ();}
     }
