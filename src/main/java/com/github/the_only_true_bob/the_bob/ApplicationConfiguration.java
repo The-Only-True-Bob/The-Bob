@@ -1,6 +1,7 @@
 package com.github.the_only_true_bob.the_bob;
 
 import com.github.the_only_true_bob.the_bob.finder.Finder;
+import com.github.the_only_true_bob.the_bob.finder.FinderImpl;
 import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
@@ -77,8 +78,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public Finder finder() {
-        // TODO: 21/10/17 implement
-        return message -> null;
+        return new FinderImpl();
     }
 
     @Bean

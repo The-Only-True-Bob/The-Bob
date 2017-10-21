@@ -26,6 +26,14 @@ public enum AttachmentType {
         }
     },
 
+    WALL("wall") {
+        @Override
+        public Optional<List<Attachment>> parse(JsonObject attachment) {
+            // TODO: 22.10.2017 Implement wall processing
+            return Optional.empty();
+        }
+    },
+
     UNASSIGNED("UNASSIGNED") {
         @Override
         public Optional<List<Attachment>> parse(JsonObject attachment) {

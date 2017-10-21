@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.stream.Stream;
 
-class FinderImpl implements Finder {
+public class FinderImpl implements Finder {
 
     @Autowired
     private DataService dataService;
