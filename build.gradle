@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'application'
-mainClassName = 'Main'
+mainClassName = 'com.github.the_only_true_bob.the_bob.Main'
 
 repositories {
     jcenter()
