@@ -37,10 +37,7 @@ class BobHandler implements Handler {
             case MESSAGE:
                 // TODO: 21/10/17 add more sence
                 message.userId().ifPresent(userId ->
-                        dataService.findUserByVkId(userId).map(userEntity -> {
-                            System.out.print(userEntity);
-                            return userEntity;
-                        }).ifPresent(userEntity ->
+                        dataService.findUserByVkId(userId).ifPresent(userEntity ->
                                 vkService.sendMessage(Message.builder()
                                         .setUserVkId(userId)
                                         .setText("incoming message")

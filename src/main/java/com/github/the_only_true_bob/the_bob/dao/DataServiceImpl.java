@@ -24,7 +24,7 @@ public class DataServiceImpl implements DataService{
 
     @Override
     public UserEntity saveUser(final UserEntity userEntity) {
-        return userRepository.save(userEntity);
+        return userRepository.saveAndFlush(userEntity);
     }
 
     @Override
