@@ -17,7 +17,8 @@ public class UserEntity {
     private Integer acceptableAgeDiff = 5;
     private String status = CommandStatus.NONE;
 
-    private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
+    @OneToMany(mappedBy = "user")
+    private Set<EventUserEntity> eventUsers = new HashSet<>();
 
     public UserEntity(){}
 
@@ -60,7 +61,6 @@ public class UserEntity {
         this.acceptableAgeDiff = acceptableAgeDiff;
     }
 
-    @OneToMany(mappedBy = "user")
     public Set<EventUserEntity> getEventUserEntity() {
         return eventUsers;
     }

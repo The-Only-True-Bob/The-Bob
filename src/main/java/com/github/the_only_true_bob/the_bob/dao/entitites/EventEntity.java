@@ -19,7 +19,8 @@ public class EventEntity {
     private String type;
     private String name;
 
-    private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
+    @OneToMany(mappedBy = "event")
+    private Set<EventUserEntity> eventUsers = new HashSet<>();
 
     public EventEntity(){}
 
@@ -50,7 +51,6 @@ public class EventEntity {
         this.afishaId = afishaId;
     }
 
-    @OneToMany(mappedBy = "event")
     public Set<EventUserEntity> getEventUsers() {
         return eventUsers;
     }
