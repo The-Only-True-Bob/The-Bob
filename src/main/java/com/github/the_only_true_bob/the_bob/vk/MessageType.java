@@ -6,10 +6,10 @@ import com.google.gson.JsonObject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.github.the_only_true_bob.the_bob.utils.Utils.stringFromJson;
 import static java.util.stream.Collectors.toList;
 
 public enum MessageType {
@@ -32,16 +32,11 @@ public enum MessageType {
         @Override
         public Optional<Message> parse(JsonObject body) {
             final Message.Builder builder = Message.builder().setType(this);
-            final BiFunction<JsonObject, String, String> jsonStringFrom =
-                    (object, property) -> Optional.ofNullable(object.get("user_id"))
-                                                  .map(JsonElement::getAsString)
-                                                  .orElse("");
-
             Optional.ofNullable(body.get("object"))
                     .map(JsonElement::getAsJsonObject)
                     .map(object -> {
-                        builder.setUserVkId(jsonStringFrom.apply(object, "user_id"))
-                               .setText(jsonStringFrom.apply(object, "body"));
+                        builder.setUserVkId(stringFromJson(object, "user_id"))
+                               .setText(stringFromJson(object, "body"));
                         return object.get("attachments");
                     })
                     .map(attachments -> StreamSupport.stream(attachments.getAsJsonArray().spliterator(), false)
