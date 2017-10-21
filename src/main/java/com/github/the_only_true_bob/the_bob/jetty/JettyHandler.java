@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import static com.github.the_only_true_bob.the_bob.utils.Utils.stringFromJson;
+
 public class JettyHandler extends AbstractHandler {
     static final String OK_MESSAGE = "OK";
 
@@ -31,7 +33,7 @@ public class JettyHandler extends AbstractHandler {
 
         final JsonParser jsonParser = new JsonParser();
         final JsonObject callbackMessage = jsonParser.parse(body).getAsJsonObject();
-        if (callbackMessage.get("type").getAsString().equals("confirmation")) {
+        if (stringFromJson(callbackMessage, "type").equals("confirmation")) {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
