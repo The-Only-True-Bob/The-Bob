@@ -41,9 +41,9 @@ import static java.util.stream.Collectors.toList;
 @PropertySource("classpath:config.properties")
 public class ApplicationConfiguration {
 
-    @Value("1")
+    @Value("${group.id}")
     private int groupId;
-    @Value("jhjbhjbh")
+    @Value("${token}")
     private String token;
     @Value("${confirmation.code}")
     private String confirmationCode;
