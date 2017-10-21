@@ -7,10 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.github.the_only_true_bob.the_bob.utils.Utils.stringFromJson;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 public enum MessageType {
     POLL("poll_vote_new") {
@@ -31,28 +31,31 @@ public enum MessageType {
         @Override
         public Optional<Message> parse(JsonObject body) {
             final Message.Builder builder = Message.builder().setType(this);
-            Optional.ofNullable(body.get("object"))
+            return Optional.ofNullable(body.get("object"))
                     .map(JsonElement::getAsJsonObject)
                     .map(object -> {
                         builder.setUserVkId(stringFromJson(object, "user_id"))
                                .setText(stringFromJson(object, "body"));
                         return object.get("attachments");
                     })
-                    .map(attachments -> StreamSupport.stream(attachments.getAsJsonArray().spliterator(), false)
-                                                     .map(JsonElement::getAsJsonObject)
-                                                     .flatMap(attachment ->
-                                                             Optional.ofNullable(attachment.get("type"))
-                                                                     .map(JsonElement::getAsString)
-                                                                     .flatMap(type -> AttachmentType.of(type)
-                                                                                                    .parse(attachment)
-                                                                                                    .map(List::stream))
-                                                                     .orElseGet(Stream::empty)
-                                    )
-                                    .collect(toList())
-                    )
-                    .ifPresent(builder::setAttachments);
-
-            return Optional.ofNullable(builder.build());
+                    .map(attachments -> {
+                        final List<Attachment> attachmentList =
+                                stream(attachments.getAsJsonArray().spliterator(), false)
+                                        .map(JsonElement::getAsJsonObject)
+                                        .flatMap(attachment ->
+                                                Optional.ofNullable(attachment.get("type"))
+                                                        .map(JsonElement::getAsString)
+                                                        .flatMap(type ->
+                                                                AttachmentType.of(type)
+                                                                              .parse(attachment)
+                                                                              .map(List::stream)
+                                                        )
+                                                        .orElseGet(Stream::empty)
+                                        )
+                                        .collect(toList());
+                                return builder.setAttachments(attachmentList).build();
+                            }
+                    );
         }
     },
 
