@@ -2,10 +2,10 @@ package com.github.the_only_true_bob.the_bob.handler;
 
 import com.github.the_only_true_bob.the_bob.vk.Message;
 import com.github.the_only_true_bob.the_bob.vk.VkService;
+import com.github.the_only_true_bob.the_bob.vk.polls.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 
-import java.util.Locale;
+import java.util.stream.Stream;
 
 class BobHandler implements Handler {
 
@@ -13,28 +13,33 @@ class BobHandler implements Handler {
     private VkService vkService;
     @Autowired
     private MessageProvider messageProvider;
+    @Autowired
+    private Stream<Poll> polls;
 
     @Override
-    public void accept(Message inMessage) {
+    public void accept(Message message) {
         // TODO: 20.10.17 Accept message and process
         System.err.println("That's the way the cookie crumbles!");
-        switch (inMessage.type()) {
+        switch (message.type()) {
             case MESSAGE:
                 // TODO: 20.10.17 Figure out what does he talking about and does his message have an attachments
                 System.out.println("processing message");
                 break;
             case POLL:
-                // TODO: 20.10.17 Update user preferences in database
-                System.out.println("processing poll");
+                message.userId().ifPresent(userId ->
+                        message.pollId()
+                                .flatMap(pollId -> polls
+                                        .filter(poll -> pollId.equals(poll.id()))
+                                        .findFirst())
+                                .ifPresent(poll -> poll.handle(message)));
                 break;
             default:
-                inMessage.userId()
-                        .ifPresent(userId ->
-                                vkService.sendMessage(
-                                        Message.builder()
-                                                .setText(messageProvider.get("error.answer"))
-                                                .setUserVkId(userId)
-                                                .build()));
+                message.userId()
+                        .ifPresent(userId -> vkService.sendMessage(
+                                Message.builder()
+                                        .setText(messageProvider.get("error.answer"))
+                                        .setUserVkId(userId)
+                                        .build()));
         }
     }
 }

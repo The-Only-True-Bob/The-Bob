@@ -20,6 +20,6 @@ public class MessageProviderTest {
     @Test
     public void test1() throws Exception {
         final String actual = messageProvider.get("error.answer");
-        Assert.assertEquals("test1", actual);
+        Assert.assertEquals("Я не знаю, как на это реагировать", actual);
     }
 }

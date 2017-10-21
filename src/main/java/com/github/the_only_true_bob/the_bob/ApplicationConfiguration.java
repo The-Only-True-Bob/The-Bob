@@ -3,6 +3,9 @@ package com.github.the_only_true_bob.the_bob;
 import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
+import com.github.the_only_true_bob.the_bob.vk.polls.AgePoll;
+import com.github.the_only_true_bob.the_bob.vk.polls.Poll;
+import com.github.the_only_true_bob.the_bob.vk.polls.SexPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.client.actors.UserActor;
@@ -23,7 +26,6 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -41,13 +43,25 @@ public class ApplicationConfiguration {
 
     @Value("1")
     private int groupId;
-
     @Value("jhjbhjbh")
     private String token;
-
     @Value("${confirmation.code}")
-    private static String confirmationCode;
+    private String confirmationCode;
 
+    @Bean
+    public Stream<Poll> polls() {
+        return Stream.of(agePoll(), sexPoll());
+    }
+
+    @Bean
+    public Poll sexPoll() {
+        return new SexPoll();
+    }
+
+    @Bean
+    public Poll agePoll() {
+        return new AgePoll();
+    }
 
     @Bean
     public VkApiClient vkApi() {
