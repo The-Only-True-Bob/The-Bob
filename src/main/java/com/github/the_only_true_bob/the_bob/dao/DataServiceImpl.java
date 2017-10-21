@@ -33,6 +33,21 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
+    public List<UserEntity> findUsersByAcceptableSex(final String acceptableSex) {
+        return userRepository.findByAcceptableSex(acceptableSex);
+    }
+
+    @Override
+    public List<UserEntity> findUsersByAcceptableAgeDiff(final int acceptableAgeDiff) {
+        return userRepository.findByAcceptableAgeDiff(acceptableAgeDiff);
+    }
+
+    @Override
+    public List<UserEntity> findUsersByAcceptableSexAndAcceptableAgeDiff(final String acceptableSex, final int acceptableAgeDiff) {
+        return userRepository.findByAcceptableSexAndAcceptableAgeDiff(acceptableSex, acceptableAgeDiff);
+    }
+
+    @Override
     public Optional<UserEntity> findUserById(final Long id) {
         return userRepository.findById(id);
     }
@@ -56,6 +71,21 @@ public class DataServiceImpl implements DataService{
     @Override
     public Optional<EventEntity> findEventById(final Long id) {
         return eventRepository.findById(id);
+    }
+
+    @Override
+    public List<EventEntity> findEventsByTypeAndDate(final String type, final String date) {
+        return eventRepository.findByTypeAndDate(type, date);
+    }
+
+    @Override
+    public List<EventEntity> findEventsByTypeAndName(final String type, final String name) {
+        return eventRepository.findByTypeAndName(type, name);
+    }
+
+    @Override
+    public List<EventEntity> findEventsByName(final String name) {
+        return eventRepository.findByName(name);
     }
 
 

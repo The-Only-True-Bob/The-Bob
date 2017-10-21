@@ -23,11 +23,8 @@ public class EventEntity {
 
     public EventEntity(){}
 
-    public EventEntity(final String afishaId, final String afishaUrl, final String afishaImgUrl, final String date, final String placeName, final String placeAddress, final String type, final String name) {
+    public EventEntity(final String afishaId, final String placeName, final String placeAddress, final String type, final String name) {
         this.afishaId = afishaId;
-        this.afishaUrl = afishaUrl;
-        this.afishaImgUrl = afishaImgUrl;
-        this.date = date;
         this.placeName = placeName;
         this.placeAddress = placeAddress;
         this.type = type;

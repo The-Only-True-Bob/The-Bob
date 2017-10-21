@@ -40,33 +40,82 @@ public class MainTest {
     @Test
     @Transactional
     public void dataBaseTest() throws Exception{
-        UserEntity userEntity = new UserEntity("123456");
-        EventEntity eventEntity = new EventEntity("afishaId","url","img","date","placeName","placeAddress","type","name");
-        EventUserEntity eventUserEntity = new EventUserEntity();
 
-        userRepository.save(userEntity);
-        eventRepository.save(eventEntity);
+        //add Users
+        UserEntity userEntity0 = new UserEntity("111111");
+        userEntity0.setAcceptableAgeDiff(1);
+        userEntity0.setAcceptableSex("M");
+
+        UserEntity userEntity1 = new UserEntity("222222");
+        userEntity1.setAcceptableAgeDiff(1);
+        userEntity1.setAcceptableSex("M");
+
+        UserEntity userEntity2 = new UserEntity("333333");
+        userEntity2.setAcceptableAgeDiff(1);
+        userEntity2.setAcceptableSex("F");
+
+        dataService.saveUser(userEntity0);
+        dataService.saveUser(userEntity1);
+        dataService.saveUser(userEntity2);
 
 
-        eventUserEntity.setUser(userEntity);
-        eventUserEntity.setEvent(eventEntity);
-        eventUserEntity.setStage("stage");
-        eventUserEntity.setStatus("status");
+        //add Events
+        EventEntity eventEntity0 = new EventEntity("afishaId1","AwesomePlaceName","city, street, house, note","Concert","Muse");
+        EventEntity eventEntity1 = new EventEntity("afishaId2","SuperCoolPlaceName","city, street, house","Cinema","Matrix 99");
+        EventEntity eventEntity2 = new EventEntity("afishaId3","SuperCoolPlaceName","city, street, house","Cinema","Matrix 99");
 
-        eventUserRepository.save(eventUserEntity);
+        dataService.saveEvent(eventEntity0);
+        dataService.saveEvent(eventEntity1);
+        dataService.saveEvent(eventEntity2);
 
 
-     //   final EventUserEntity savedEventUser = eventUserRepository.save(eventUserEntity);
-     //   System.out.println(savedEventUser.getId());
-//
-//      //  UserEntity user1 = dataService.findUserById(1L).get();
+        //Add eventUser
+        EventUserEntity eventUserEntity0 = new EventUserEntity();
+        EventUserEntity eventUserEntity1 = new EventUserEntity();
+        EventUserEntity eventUserEntity2 = new EventUserEntity();
+        EventUserEntity eventUserEntity3 = new EventUserEntity();
+
+        eventUserEntity0.setUser(userEntity0);
+        eventUserEntity0.setEvent(eventEntity0);
+        eventUserEntity0.setStage("finish");
+        eventUserEntity0.setStatus("active");
+
+        eventUserEntity1.setUser(userEntity1);
+        eventUserEntity1.setEvent(eventEntity1);
+        eventUserEntity1.setStage("findPartner");
+        eventUserEntity1.setStatus("passive");
+
+        eventUserEntity2.setUser(userEntity2);
+        eventUserEntity2.setEvent(eventEntity2);
+        eventUserEntity2.setStage("findPartner");
+        eventUserEntity2.setStatus("passive");
+
+        eventUserEntity3.setUser(userEntity2);
+        eventUserEntity3.setEvent(eventEntity0);
+        eventUserEntity3.setStage("findPartner");
+        eventUserEntity3.setStatus("active");
+
+
+        dataService.saveEventUser(eventUserEntity0);
+        dataService.saveEventUser(eventUserEntity1);
+        dataService.saveEventUser(eventUserEntity2);
+        dataService.saveEventUser(eventUserEntity3);
+
+
+        //show
+        List<UserEntity> listUsersByAcceptableAgeAndAcceptableAgeDiff = dataService.findUsersByAcceptableSexAndAcceptableAgeDiff("M",1);
+        listUsersByAcceptableAgeAndAcceptableAgeDiff.stream()
+                .map(UserEntity::getVkId)
+                .forEach(System.out::println);
+
+//        final EventUserEntity savedEventUser = eventUserRepository.save(eventUserEntity);
+//        System.out.println(savedEventUser.getId());
+//        UserEntity user1 = dataService.findUserById(1L).get();
 //        EventEntity event1 = dataService.findEventById(2L).get();
-//
-        List<EventUserEntity> eventUserEntity1 = dataService.findUsersByEvent(eventEntity);
-        System.out.println(eventUserEntity1);
 
-//        //assertEquals("123456", user1.getVkId());
+//        assertEquals("123456", user1.getVkId());
 //        assertEquals("afisha_id",event1.getAfishaId());
+
     }
 
 }

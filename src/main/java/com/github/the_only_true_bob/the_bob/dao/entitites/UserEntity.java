@@ -79,6 +79,10 @@ public class UserEntity {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (vkId != null ? !vkId.equals(that.vkId) : that.vkId != null) return false;
+        if (acceptableSex != null ? !acceptableSex.equals(that.acceptableSex) : that.acceptableSex != null)
+            return false;
+        if (acceptableAgeDiff != null ? !acceptableAgeDiff.equals(that.acceptableAgeDiff) : that.acceptableAgeDiff != null)
+            return false;
         return eventUsers != null ? eventUsers.equals(that.eventUsers) : that.eventUsers == null;
     }
 
@@ -86,6 +90,8 @@ public class UserEntity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (vkId != null ? vkId.hashCode() : 0);
+        result = 31 * result + (acceptableSex != null ? acceptableSex.hashCode() : 0);
+        result = 31 * result + (acceptableAgeDiff != null ? acceptableAgeDiff.hashCode() : 0);
         result = 31 * result + (eventUsers != null ? eventUsers.hashCode() : 0);
         return result;
     }

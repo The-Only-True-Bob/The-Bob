@@ -11,15 +11,20 @@ public interface DataService {
 
     //UserEntity
     UserEntity saveUser(UserEntity userEntity);
-    Optional<UserEntity> findUserByVkId(String vkId);
     Optional<UserEntity> findUserById(Long id);
+    Optional<UserEntity> findUserByVkId(String vkId);
+    List<UserEntity> findUsersByAcceptableSex(String acceptableSex);
+    List<UserEntity> findUsersByAcceptableAgeDiff(int acceptableAgeDiff);
+    List<UserEntity> findUsersByAcceptableSexAndAcceptableAgeDiff(String acceptableSex, int acceptableAgeDiff);
     void delete(UserEntity userEntity);
     void deleteAllUsers();
 
     //EventEntity
     EventEntity saveEvent(EventEntity eventEntity);
     Optional<EventEntity> findEventById(Long id);
-
+    List<EventEntity> findEventsByTypeAndDate(String type, String date);
+    List<EventEntity> findEventsByTypeAndName(String type, String name);
+    List<EventEntity> findEventsByName(String name);
     void delete(EventEntity eventEntity);
     void deleteAllEvents();
 
@@ -31,4 +36,5 @@ public interface DataService {
     void delete(EventUserEntity eventUserEntity);
     void deleteAllEventUsers();
 
+    //find usersByAcceptableAgeAndAcceptableDiff and eventTypeAndName
 }
