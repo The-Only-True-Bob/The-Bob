@@ -6,13 +6,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class Main {
 
+    public static final AnnotationConfigApplicationContext context =
+            new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+
     public static void main(String[] args) throws Exception {
         final int port = 8080 /*Integer.parseInt(System.getenv("PORT"))*/;
 
         final Server server = new Server(port);
-        final JettyHandler jettyHandler =
-                new AnnotationConfigApplicationContext(ApplicationConfiguration.class)
-                        .getBean("jettyHandler", JettyHandler.class);
+        final JettyHandler jettyHandler = context.getBean("jettyHandler", JettyHandler.class);
         server.setHandler(jettyHandler);
 
         server.start();

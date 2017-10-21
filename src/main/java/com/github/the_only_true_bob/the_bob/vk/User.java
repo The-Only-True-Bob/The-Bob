@@ -4,6 +4,7 @@ import java.util.Optional;
 
 public class User {
     // 1-female, 2-male, 3-none
+    private String vkId;
     private String sex;
     private String about;
     private String birthday;
@@ -11,7 +12,8 @@ public class User {
     private String homeTown;
     private String music;
 
-    private User(String sex, String about, String birthday, String city, String homeTown, String music) {
+    private User(final String vkId, final String sex, final String about, final String birthday, final String city, final String homeTown, final String music) {
+        this.vkId = vkId;
         this.sex = sex;
         this.about = about;
         this.birthday = birthday;
@@ -28,6 +30,10 @@ public class User {
 
     public static User empty() {
         return new User();
+    }
+
+    public String vkId() {
+        return vkId;
     }
 
     public Optional<String> sex() {
@@ -56,12 +62,18 @@ public class User {
 
     public static class Builder {
 
+        private String vkId;
         private String sex;
         private String about;
         private String birthday;
         private String city;
         private String homeTown;
         private String music;
+
+        public Builder setVkId(final String vkId) {
+            this.vkId = vkId;
+            return this;
+        }
 
         public Builder setSex(String sex) {
             this.sex = sex;
@@ -94,7 +106,22 @@ public class User {
         }
 
         public User build() {
-            return new User(sex, about, birthday, city, homeTown, music);
+            return new User(vkId, sex, about, birthday, city, homeTown, music);
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final User user = (User) o;
+
+        return vkId != null ? vkId.equals(user.vkId) : user.vkId == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return vkId != null ? vkId.hashCode() : 0;
     }
 }

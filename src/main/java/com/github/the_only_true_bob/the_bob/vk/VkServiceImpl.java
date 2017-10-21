@@ -103,6 +103,7 @@ public class VkServiceImpl implements VkService {
 
     private User toUser(UserXtrCounters userXtrCounters) {
         return User.builder()
+                .setVkId(String.valueOf(userXtrCounters.getId()))
                 .setSex(userXtrCounters.getSex().getValue().toString())
                 .setAbout(userXtrCounters.getAbout())
                 .setBirthday(userXtrCounters.getBdate())
