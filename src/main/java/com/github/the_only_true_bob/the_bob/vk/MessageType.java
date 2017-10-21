@@ -27,6 +27,17 @@ public enum MessageType {
         }
     },
 
+    ALLOW_MESSAGE("message_allow") {
+        @Override
+        public Optional<Message> parse(final JsonObject body) {
+            final Message.Builder builder = Message.builder().setType(this);
+            return Optional.ofNullable(body.get("object"))
+                    .map(JsonElement::getAsJsonObject)
+                    .map(object -> builder.setUserVkId(stringFromJson(object, "user_id"))
+                            .build());
+        }
+    },
+
     MESSAGE("message_new") {
         @Override
         public Optional<Message> parse(JsonObject body) {
