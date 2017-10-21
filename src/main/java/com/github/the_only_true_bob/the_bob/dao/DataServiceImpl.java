@@ -90,7 +90,7 @@ public class DataServiceImpl implements DataService{
 
     @Override
     public List<EventEntity> findEventEntities() {
-        return eventRepository.findAllEventEntities();
+        return eventRepository.findAll();
     }
 
     @Override
