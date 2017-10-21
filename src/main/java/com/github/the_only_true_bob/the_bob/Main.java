@@ -10,7 +10,7 @@ public class Main {
             new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 
     public static void main(String[] args) throws Exception {
-        final int port = 8080 /*Integer.parseInt(System.getenv("PORT"))*/;
+        final int port = Integer.parseInt(System.getenv("PORT"));
 
         final Server server = new Server(port);
         final JettyHandler jettyHandler = context.getBean("jettyHandler", JettyHandler.class);
