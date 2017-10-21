@@ -8,9 +8,9 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 public class Utils {
-    public static final String stringFromJson(final JsonObject object, final String property) {
+    public static String stringFromJson(final JsonObject object, final String property) {
         return Optional.ofNullable(requireNonNull(object).get(property))
                        .map(JsonElement::getAsString)
-                       .orElse("");
+                       .orElse(null); // Because we make difference between no value and empty value
     }
 }
