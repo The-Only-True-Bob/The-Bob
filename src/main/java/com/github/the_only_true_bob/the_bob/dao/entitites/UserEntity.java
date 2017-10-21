@@ -1,5 +1,7 @@
 package com.github.the_only_true_bob.the_bob.dao.entitites;
 
+import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +15,7 @@ public class UserEntity {
     // 1-female, 2-male, 3-none
     private String acceptableSex = "3";
     private Integer acceptableAgeDiff = 5;
+    private String status = CommandStatus.NONE;
 
     private Set<EventUserEntity> eventUsers = new HashSet<EventUserEntity>();
 
@@ -68,6 +71,22 @@ public class UserEntity {
 
     public void addUserEventEntity(final EventUserEntity eventUserEntity) {
         this.eventUsers.add(eventUserEntity);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(final String status) {
+        this.status = status;
+    }
+
+    public Set<EventUserEntity> getEventUsers() {
+        return eventUsers;
+    }
+
+    public void setEventUsers(final Set<EventUserEntity> eventUsers) {
+        this.eventUsers = eventUsers;
     }
 
     @Override

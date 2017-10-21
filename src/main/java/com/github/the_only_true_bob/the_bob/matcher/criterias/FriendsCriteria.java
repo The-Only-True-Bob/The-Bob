@@ -21,18 +21,27 @@ public interface FriendsCriteria extends MatchingCriteria {
         return new CriteriaValue() {
             @Override
             public Integer get() {
-                return friends1.size() * points();
+                return friends1.size() * points()
+                        + getFriendsPoints(left, right) * points() * 10;
             }
 
             @Override
             public String toString() {
                 final StringJoiner sj =
                         new StringJoiner(", ",
-                                String.format("у вас %d общих друзей:%n", friends1.size()),
+                                String.format("У вас %d общих друзей:%n", friends1.size()),
                                 "");
                 friends1.forEach(user -> sj.add(
                         String.format("%s %s", user.firstName().get(), user.lastName().get())));
                 return sj.toString();
+            }
+
+            private int getFriendsPoints(final User left, final User right) {
+                return left.friends().stream()
+                        .filter(user -> user.vkId().equals(right.vkId()))
+                        .findFirst()
+                        .map(user -> 1)
+                        .orElse(0);
             }
         };
     }

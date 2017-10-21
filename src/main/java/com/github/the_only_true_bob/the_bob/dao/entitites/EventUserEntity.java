@@ -7,10 +7,11 @@ import javax.persistence.*;
 public class EventUserEntity {
 
     private Long id;
-    private String status;
-    private String stage;
+    private String status = "listed";
+    private String stage = "none";
     private UserEntity user;
     private EventEntity event;
+    private int number;
 
     public EventUserEntity(){}
 
@@ -59,6 +60,14 @@ public class EventUserEntity {
 
     public void setEvent(final EventEntity event) {
         this.event = event;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(final int number) {
+        this.number = number;
     }
 
     @Override

@@ -1,7 +1,12 @@
 package com.github.the_only_true_bob.the_bob;
 
+import com.github.the_only_true_bob.the_bob.finder.Finder;
+import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
+import com.github.the_only_true_bob.the_bob.handler.command.BobCommand;
+import com.github.the_only_true_bob.the_bob.handler.command.ChooseEvent;
+import com.github.the_only_true_bob.the_bob.handler.command.SuggestCommand;
 import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
 import com.github.the_only_true_bob.the_bob.matcher.BobMatcher;
 import com.github.the_only_true_bob.the_bob.matcher.Matcher;
@@ -31,9 +36,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -70,6 +77,35 @@ public class ApplicationConfiguration {
 
     @Value("${app.token}")
     private String appToken;
+
+    @Bean
+    public Finder finder() {
+        // TODO: 21/10/17 implement
+        return message -> null;
+    }
+
+    @Bean
+    public Map<String, BobCommand> commandsMap() {
+        final Map<String, BobCommand> map = new HashMap<>();
+        map.put(CommandStatus.NONE, suggestCommand());
+        map.put(CommandStatus.LISTED, chooseEventCommand());
+        return map;
+    }
+
+    @Bean
+    public BobCommand chooseEventCommand() {
+        return new ChooseEvent();
+    }
+
+    @Bean
+    public BobCommand suggestCommand() {
+        return new SuggestCommand();
+    }
+
+    @Bean
+    public SessionContainer sessionContainer() {
+        return new SessionContainer();
+    }
 
     @Bean
     public Matcher bobMatcher() {
