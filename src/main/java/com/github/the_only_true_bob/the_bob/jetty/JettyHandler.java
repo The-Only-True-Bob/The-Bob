@@ -33,7 +33,7 @@ public class JettyHandler extends AbstractHandler {
 
         final JsonParser jsonParser = new JsonParser();
         final JsonObject callbackMessage = jsonParser.parse(body).getAsJsonObject();
-        if (stringFromJson(callbackMessage, "type").equals("confirmation")) {
+        if ("confirmation".equals(stringFromJson(callbackMessage, "type"))) {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
