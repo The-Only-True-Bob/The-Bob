@@ -38,6 +38,7 @@ public class JettyHandler extends AbstractHandler {
             response.setStatus(HttpServletResponse.SC_OK);
             baseRequest.setHandled(true);
             response.getWriter().println(confirmationCode);
+            return;
         } else {
             bobHandler.accept(Message.from(callbackMessage));
         }
