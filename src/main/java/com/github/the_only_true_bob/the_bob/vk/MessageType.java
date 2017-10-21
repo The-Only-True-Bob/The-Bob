@@ -89,12 +89,10 @@ public enum MessageType {
     }
 
     public static MessageType of(final String type) {
-        final MessageType fgkhmfglk = Arrays.stream(values())
+        return Arrays.stream(values())
                 .filter(messageType -> messageType.toString().equals(type))
                 .findFirst()
                 .orElse(UNASSIGNED);
-        System.out.printf("type %s - %s", type, fgkhmfglk.toString());
-        return fgkhmfglk;
     }
 
     public abstract Optional<Message> parse(JsonObject body);
