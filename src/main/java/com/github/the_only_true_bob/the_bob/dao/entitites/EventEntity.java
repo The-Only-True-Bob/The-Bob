@@ -2,7 +2,9 @@ package com.github.the_only_true_bob.the_bob.dao.entitites;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,8 +21,7 @@ public class EventEntity {
     private String type;
     private String name;
 
-    @OneToMany(mappedBy = "event")
-    private Set<EventUserEntity> eventUsers = new HashSet<>();
+    private List<EventUserEntity> eventUsers = new ArrayList<>();
 
     public EventEntity(){}
 
@@ -51,11 +52,12 @@ public class EventEntity {
         this.afishaId = afishaId;
     }
 
-    public Set<EventUserEntity> getEventUsers() {
+    @OneToMany(mappedBy = "event")
+    public List<EventUserEntity> getEventUserEntities() {
         return eventUsers;
     }
 
-    public void setEventUsers(final Set<EventUserEntity> eventUsers) {
+    public void setEventUserEntities(final List<EventUserEntity> eventUsers) {
         this.eventUsers = eventUsers;
     }
 

@@ -3,7 +3,9 @@ package com.github.the_only_true_bob.the_bob.dao.entitites;
 import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,8 +19,7 @@ public class UserEntity {
     private Integer acceptableAgeDiff = 5;
     private String status = CommandStatus.NONE;
 
-    @OneToMany(mappedBy = "user")
-    private Set<EventUserEntity> eventUsers = new HashSet<>();
+    private List<EventUserEntity> eventUsers = new ArrayList<>();
 
     public UserEntity(){}
 
@@ -61,11 +62,12 @@ public class UserEntity {
         this.acceptableAgeDiff = acceptableAgeDiff;
     }
 
-    public Set<EventUserEntity> getEventUserEntity() {
+    @OneToMany(mappedBy = "user")
+    public List<EventUserEntity> getEventUserEntity() {
         return eventUsers;
     }
 
-    public void setEventUserEntity(final Set<EventUserEntity> eventUserEntity) {
+    public void setEventUserEntity(final List<EventUserEntity> eventUserEntity) {
         this.eventUsers = eventUserEntity;
     }
 
@@ -79,14 +81,6 @@ public class UserEntity {
 
     public void setStatus(final String status) {
         this.status = status;
-    }
-
-    public Set<EventUserEntity> getEventUsers() {
-        return eventUsers;
-    }
-
-    public void setEventUsers(final Set<EventUserEntity> eventUsers) {
-        this.eventUsers = eventUsers;
     }
 
     @Override
