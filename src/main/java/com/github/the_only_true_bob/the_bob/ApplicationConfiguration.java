@@ -4,9 +4,7 @@ import com.github.the_only_true_bob.the_bob.finder.Finder;
 import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
-import com.github.the_only_true_bob.the_bob.handler.command.BobCommand;
-import com.github.the_only_true_bob.the_bob.handler.command.ChooseEvent;
-import com.github.the_only_true_bob.the_bob.handler.command.SuggestCommand;
+import com.github.the_only_true_bob.the_bob.handler.command.*;
 import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
 import com.github.the_only_true_bob.the_bob.matcher.BobMatcher;
 import com.github.the_only_true_bob.the_bob.matcher.Matcher;
@@ -88,12 +86,24 @@ public class ApplicationConfiguration {
         final Map<String, BobCommand> map = new HashMap<>();
         map.put(CommandStatus.NONE, suggestCommand());
         map.put(CommandStatus.LISTED, chooseEventCommand());
+        map.put(CommandStatus.IS_NEED_IN_COMPANION, startCompanionSearchCommand());
+        map.put(CommandStatus.CHOOSE_SEARCH_CRITERIA, chooseSearchCriteriaCommand());
         return map;
     }
 
     @Bean
+    public BobCommand chooseSearchCriteriaCommand() {
+        return new ChooseSearchCriteriaCommand();
+    }
+
+    @Bean
+    public BobCommand startCompanionSearchCommand() {
+        return new StartCompanionSearchCommand();
+    }
+
+    @Bean
     public BobCommand chooseEventCommand() {
-        return new ChooseEvent();
+        return new ChooseEventCommand();
     }
 
     @Bean

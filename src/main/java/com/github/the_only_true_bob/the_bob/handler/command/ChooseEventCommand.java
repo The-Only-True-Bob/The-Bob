@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-public class ChooseEvent implements BobCommand {
+public class ChooseEventCommand implements BobCommand {
 
     @Autowired
     private DataService dataService;
@@ -25,6 +25,7 @@ public class ChooseEvent implements BobCommand {
         final String text = message.text().orElse("");
         final Optional<EventUserEntity> eventUserEntity = events.stream()
                 .filter(eue -> CommandStatus.LISTED.equals(eue.getStatus()))
+                .peek(eue -> eue.setStatus(CommandStatus.NONE))
                 .filter(eue -> text.equals(String.valueOf(eue.getNumber())))
                 .findFirst();
 

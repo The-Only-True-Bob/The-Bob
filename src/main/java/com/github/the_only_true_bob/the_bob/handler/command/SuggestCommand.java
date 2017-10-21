@@ -4,6 +4,7 @@ import com.github.the_only_true_bob.the_bob.dao.DataService;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventUserEntity;
 import com.github.the_only_true_bob.the_bob.finder.Finder;
+import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.vk.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class SuggestCommand implements BobCommand {
                                 dataService
                                         .findUserByVkId(message.userId().get()).get());
                         eventUserEntity.setNumber(num[0]);
-                        eventUserEntity.setStatus("listed");
+                        eventUserEntity.setStatus(CommandStatus.LISTED);
                         num[0]++;
                         return eventUserEntity;
                     })
