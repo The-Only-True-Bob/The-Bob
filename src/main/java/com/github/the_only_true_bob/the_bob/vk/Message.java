@@ -1,11 +1,12 @@
 package com.github.the_only_true_bob.the_bob.vk;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.the_only_true_bob.the_bob.utils.Utils.stringFromJson;
 
 public interface Message {
     MessageType type();
@@ -16,9 +17,9 @@ public interface Message {
     Optional<String> userId();
 
     static Message from(final JsonObject body) {
-        final JsonElement typeJson = body.get("type");
-        final String type = typeJson.getAsString();
-        return MessageType.of(type).parse(body).orElse(Message.empty());
+        return MessageType.of(stringFromJson(body, "type"))
+                          .parse(body)
+                          .orElseGet(Message::empty);
     }
 
     static Message empty() {
