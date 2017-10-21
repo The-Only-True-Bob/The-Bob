@@ -16,15 +16,14 @@ public enum MessageType {
     POLL("poll_vote_new") {
         @Override
         public Optional<Message> parse(JsonObject body) {
-            final JsonObject objectJson = body.get("object").getAsJsonObject();
-            return Optional.ofNullable(
-                    Message.builder()
-                            .setType(this)
-                            .setUserVkId(objectJson.get("user_id").getAsString())
-                            .setPollId(objectJson.get("poll_id").getAsString())
-                            .setOptionId(objectJson.get("option_id").getAsString())
-                            .build()
-            );
+            final Message.Builder builder = Message.builder().setType(this);
+            return Optional.ofNullable(body.get("object"))
+                           .map(JsonElement::getAsJsonObject)
+                           .map(object -> builder.setUserVkId(stringFromJson(object, "user_id"))
+                                                 .setPollId(stringFromJson(object, "poll_id"))
+                                                 .setPollId(stringFromJson(object, "option_id"))
+                                                 .build()
+                           );
         }
     },
 
