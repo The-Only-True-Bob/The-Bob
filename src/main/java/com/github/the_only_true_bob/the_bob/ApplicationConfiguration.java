@@ -42,12 +42,21 @@ import static java.util.stream.Collectors.toList;
 @PropertySource("classpath:config.properties")
 public class ApplicationConfiguration {
 
+    @Value("${confirmation_code}")
+    private String confirmationCode;
+
     @Value("${group.id}")
     private int groupId;
-    @Value("${token}")
-    private String token;
-    @Value("${confirmation.code}")
-    private String confirmationCode;
+
+    @Value("${group.token}")
+    private String groupToken;
+
+    @Value("${app.id}")
+    private int appId;
+
+    @Value("${app.token}")
+    private String appToken;
+
 
     @Bean
     public Stream<Poll> polls() {
@@ -71,12 +80,12 @@ public class ApplicationConfiguration {
 
     @Bean
     public GroupActor groupActor() {
-        return new GroupActor(groupId, token);
+        return new GroupActor(groupId, groupToken);
     }
 
     @Bean
     public UserActor userActor() {
-        return new UserActor(groupId, token);
+        return new UserActor(groupId, groupToken);
     }
 
     @Bean

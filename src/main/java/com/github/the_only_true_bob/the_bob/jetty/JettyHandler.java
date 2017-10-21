@@ -23,7 +23,7 @@ public class JettyHandler extends AbstractHandler {
     @Autowired
     private Handler bobHandler;
 
-    @Value("${confirmation.code}")
+    @Value("${confirmation_code}")
     private String confirmationCode;
 
     @Override
