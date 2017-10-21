@@ -7,27 +7,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public interface MusicCriteria extends MatchingCriteria {
+public interface FriendsCriteria extends MatchingCriteria {
     @Override
     default CriteriaValue calc(final UserMatch.MatchingParameterObject parameterObject) {
         final User left = parameterObject.getPair().left();
         final User right = parameterObject.getPair().right();
 
-        final List<String> musics1 = new ArrayList<>(left.music());
-        final List<String> musics2 = new ArrayList<>(right.music());
+        final List<User> friends1 = new ArrayList<>(left.friends());
+        final List<User> friends2 = new ArrayList<>(right.friends());
 
-        musics1.retainAll(musics2);
+        friends1.retainAll(friends2);
 
         return new CriteriaValue() {
             @Override
             public Integer get() {
-                return musics1.size() * points();
+                return friends1.size() * points();
             }
 
             @Override
             public String toString() {
-                final StringJoiner sj = new StringJoiner(", ","Вы вместе слушаете ","");
-                musics1.forEach(sj::add);
+                final StringJoiner sj =
+                        new StringJoiner(", ",
+                                String.format("у вас %d общих друзей:%n", friends1.size()),
+                                "");
+                friends1.forEach(user -> sj.add(
+                        String.format("%s %s", user.firstName().get(), user.lastName().get())));
                 return sj.toString();
             }
         };

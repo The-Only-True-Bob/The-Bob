@@ -3,6 +3,8 @@ package com.github.the_only_true_bob.the_bob;
 import com.github.the_only_true_bob.the_bob.handler.Handler;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.jetty.JettyHandler;
+import com.github.the_only_true_bob.the_bob.matcher.BobMatcher;
+import com.github.the_only_true_bob.the_bob.matcher.Matcher;
 import com.github.the_only_true_bob.the_bob.vk.polls.AgePoll;
 import com.github.the_only_true_bob.the_bob.vk.polls.Poll;
 import com.github.the_only_true_bob.the_bob.vk.polls.SexPoll;
@@ -57,6 +59,11 @@ public class ApplicationConfiguration {
 
     @Value("${app.token}")
     private String appToken;
+
+    @Bean
+    public Matcher bobMatcher() {
+        return new BobMatcher();
+    }
 
     @Bean
     public Stream<Poll> polls() {

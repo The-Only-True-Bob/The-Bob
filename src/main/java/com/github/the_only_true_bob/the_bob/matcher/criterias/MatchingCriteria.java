@@ -4,5 +4,5 @@ import com.github.the_only_true_bob.the_bob.matcher.UserMatch;
 
 public interface MatchingCriteria {
     int points();
-    int calc(final UserMatch.MatchingParameterObject parameterObject);
+    CriteriaValue calc(final UserMatch.MatchingParameterObject parameterObject);
 }
