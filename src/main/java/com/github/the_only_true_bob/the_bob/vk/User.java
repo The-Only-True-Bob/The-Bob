@@ -10,6 +10,9 @@ import static java.util.stream.Collectors.toList;
 public class User {
     // 1-female, 2-male, 3-none
     private String vkId;
+    private String firstName;
+    private String lastName;
+    private List<User> friends;
     private String sex;
     private String about;
     private String birthday;
@@ -17,8 +20,11 @@ public class User {
     private String homeTown;
     private List<String> music;
 
-    private User(final String vkId, final String sex, final String about, final String birthday, final String city, final String homeTown, final List<String> music) {
+    private User(final String vkId, final String firstName, final String lastName, final List<User> friends, final String sex, final String about, final String birthday, final String city, final String homeTown, final List<String> music) {
         this.vkId = vkId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.friends = friends;
         this.sex = sex;
         this.about = about;
         this.birthday = birthday;
@@ -40,6 +46,18 @@ public class User {
 
     public String vkId() {
         return vkId;
+    }
+
+    public Optional<String> firstName() {
+        return Optional.ofNullable(firstName);
+    }
+
+    public Optional<String> lastName() {
+        return Optional.ofNullable(lastName);
+    }
+
+    public List<User> friends() {
+        return Optional.ofNullable(friends).orElseGet(Collections::emptyList);
     }
 
     public Optional<String> sex() {
@@ -75,9 +93,27 @@ public class User {
         private String city;
         private String homeTown;
         private List<String> music;
+        private String firstName;
+        private String lastName;
+        private List<User> friends;
 
         public Builder setVkId(final String vkId) {
             this.vkId = vkId;
+            return this;
+        }
+
+        public Builder setFirstName(final String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder setLastName(final String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder setFriends(final List<User> friends) {
+            this.friends = friends;
             return this;
         }
 
@@ -115,7 +151,7 @@ public class User {
         }
 
         public User build() {
-            return new User(vkId, sex, about, birthday, city, homeTown, music);
+            return new User(vkId, firstName, lastName, friends, sex, about, birthday, city, homeTown, music);
         }
     }
 

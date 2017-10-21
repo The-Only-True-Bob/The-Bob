@@ -8,6 +8,7 @@ import com.github.the_only_true_bob.the_bob.vk.polls.Poll;
 import com.github.the_only_true_bob.the_bob.vk.polls.SexPoll;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
+import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.queries.users.UserField;
@@ -57,7 +58,6 @@ public class ApplicationConfiguration {
     @Value("${app.token}")
     private String appToken;
 
-
     @Bean
     public Stream<Poll> polls() {
         return Stream.of(agePoll(), sexPoll());
@@ -86,6 +86,11 @@ public class ApplicationConfiguration {
     @Bean
     public UserActor userActor() {
         return new UserActor(groupId, groupToken);
+    }
+
+    @Bean
+    public ServiceActor serviceActor() {
+        return new ServiceActor(appId, appToken);
     }
 
     @Bean
