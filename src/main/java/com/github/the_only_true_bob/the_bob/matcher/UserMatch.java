@@ -3,6 +3,8 @@ package com.github.the_only_true_bob.the_bob.matcher;
 import com.github.the_only_true_bob.the_bob.Main;
 import com.github.the_only_true_bob.the_bob.dao.DataService;
 import com.github.the_only_true_bob.the_bob.dao.entitites.UserEntity;
+import com.github.the_only_true_bob.the_bob.matcher.criterias.MusicCriteria;
+import com.github.the_only_true_bob.the_bob.matcher.criterias.PlacesCriteria;
 import com.github.the_only_true_bob.the_bob.vk.User;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -11,13 +13,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class UserMatch {
-
     private final static AnnotationConfigApplicationContext context = Main.context;
     private final static DataService dataService = context.getBean("dataService", DataService.class);
-    private int value;
+    private final static MusicCriteria musicCriteria = () -> 10;
+    private final static PlacesCriteria placesCriteria = () -> 100;
+    private final int value;
+    private final CommunicativePair pair;
 
-    private UserMatch(final int value) {
+    private UserMatch(final int value, final CommunicativePair pair) {
         this.value = value;
+        this.pair = pair;
     }
 
     static UserMatch from(final CommunicativePair pair) {
@@ -31,12 +36,15 @@ public class UserMatch {
                         .filter(UserMatch::isPairSexValid)
                         .map(UserMatch::getMatchValue))
                 .orElse(0);
-        return new UserMatch(value);
+        return new UserMatch(value, pair);
     }
 
     private static int getMatchValue(final MatchingParameterObject parameterObject) {
-        // TODO: 21/10/17 sum all criterias
-        return 0;
+        int value = 0;
+        value += musicCriteria.calc(parameterObject);
+        value += placesCriteria.calc(parameterObject);
+
+        return value;
     }
 
     private static boolean isPairSexValid(final MatchingParameterObject parameterObject) {
@@ -73,13 +81,14 @@ public class UserMatch {
     }
 
     private static boolean isBirthdayCapable(final UserEntity entity1, final String user1Birthday, final String user2Birthday) {
+        final Optional<Integer> user1Year = parseYear(user1Birthday);
+        final Optional<Integer> user2Year = parseYear(user2Birthday);
         return entity1.getAcceptableAgeDiff() == 0 ||
-                parseYear(user1Birthday)
-                        .flatMap(year1 ->
-                                parseYear(user2Birthday)
-                                        .filter(year2 ->
-                                                year2 >= year1 - entity1.getAcceptableAgeDiff()
-                                                        && year2 <= year1 + entity1.getAcceptableAgeDiff()))
+                user1Year
+                        .flatMap(year1 -> user2Year
+                                .filter(year2 ->
+                                        year2 >= year1 - entity1.getAcceptableAgeDiff()
+                                                && year2 <= year1 + entity1.getAcceptableAgeDiff()))
                         .isPresent();
     }
 
@@ -113,7 +122,7 @@ public class UserMatch {
         return value;
     }
 
-    private static class MatchingParameterObject {
+    public static class MatchingParameterObject {
         private final UserEntity left;
         private final UserEntity right;
         private final CommunicativePair pair;

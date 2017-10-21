@@ -1,6 +1,11 @@
 package com.github.the_only_true_bob.the_bob.vk;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 public class User {
     // 1-female, 2-male, 3-none
@@ -10,9 +15,9 @@ public class User {
     private String birthday;
     private String city;
     private String homeTown;
-    private String music;
+    private List<String> music;
 
-    private User(final String vkId, final String sex, final String about, final String birthday, final String city, final String homeTown, final String music) {
+    private User(final String vkId, final String sex, final String about, final String birthday, final String city, final String homeTown, final List<String> music) {
         this.vkId = vkId;
         this.sex = sex;
         this.about = about;
@@ -22,7 +27,8 @@ public class User {
         this.music = music;
     }
 
-    private User() {}
+    private User() {
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -56,8 +62,8 @@ public class User {
         return Optional.ofNullable(homeTown);
     }
 
-    public Optional<String> music() {
-        return Optional.ofNullable(music);
+    public List<String> music() {
+        return Optional.ofNullable(music).orElseGet(Collections::emptyList);
     }
 
     public static class Builder {
@@ -68,7 +74,7 @@ public class User {
         private String birthday;
         private String city;
         private String homeTown;
-        private String music;
+        private List<String> music;
 
         public Builder setVkId(final String vkId) {
             this.vkId = vkId;
@@ -101,7 +107,10 @@ public class User {
         }
 
         public Builder setMusic(String music) {
-            this.music = music;
+            this.music =
+                    Arrays.stream(music.split(",\\s*"))
+                            .map(String::trim)
+                            .collect(toList());
             return this;
         }
 

@@ -35,7 +35,7 @@ public class BobMatcher implements Matcher {
 
         final List<User> users = vkService.getUsers(usersVkIds);
 
-        // НАЧАЛА МАПА: tuple - match, потом flatMap на user - match, потом collect groupingBy user
+        // алгоритм: tuple - match, потом flatMap на user - match, потом collect groupingBy user
 
         final Set<CommunicativePair> pairs = users.stream()
                 .filter(this::vkIdIsNotNull)
@@ -61,6 +61,8 @@ public class BobMatcher implements Matcher {
                         Map.Entry::getKey,
                         entry -> entry.getValue().stream()
                                 .map(Map.Entry::getValue)
+                                .filter(UserMatch::matches)
+                                .sorted(Comparator.comparing(UserMatch::value))
                                 .collect(toList())));
     }
 
