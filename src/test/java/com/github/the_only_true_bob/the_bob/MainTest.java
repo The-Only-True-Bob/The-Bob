@@ -45,7 +45,6 @@ public class MainTest {
         UserEntity userEntity0 = new UserEntity("111111");
         userEntity0.setAcceptableAgeDiff(1);
         userEntity0.setAcceptableSex("M");
-
         UserEntity userEntity1 = new UserEntity("222222");
         userEntity1.setAcceptableAgeDiff(1);
         userEntity1.setAcceptableSex("M");

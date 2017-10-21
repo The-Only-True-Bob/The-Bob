@@ -8,6 +8,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class PlaceParser {
 
+    public String address = "";
+    public String placeName = "";
+
     public void findPlace(String placeID, String file) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -31,20 +34,19 @@ public class PlaceParser {
                         String id = new String(ch, start, length);
                         if (id.equals(placeID)) {
                             placeExists = true;
-                            System.out.println("Place-id : " + id);
                         }
                         bId = false;
                     }
                     if (bName) {
                         if (placeExists) {
-                        System.out.println("Name : " + new String(ch, start, length));
-                         }
+                            placeName = new String(ch, start, length);
+                        }
                         bName = false;
                     }
                     if (bAddress) {
                         if (placeExists) {
-                        System.out.println("Address : " + new String(ch, start, length));
-                               placeExists = false;
+                            placeExists = false;
+                            address = new String(ch, start, length);
                         }
                         bAddress = false;
                     }
