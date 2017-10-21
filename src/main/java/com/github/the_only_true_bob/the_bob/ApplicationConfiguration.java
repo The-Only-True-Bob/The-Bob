@@ -52,6 +52,9 @@ public class ApplicationConfiguration {
     @Value("${spring.datasource.password}")
     private String databasePassword;
 
+    @Value("${spring.jpa.hibernate.generateDdl}")
+    private boolean generateDdl;
+
     @Value("${confirmation_code}")
     private String confirmationCode;
 
@@ -152,7 +155,9 @@ public class ApplicationConfiguration {
 
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
-        return new HibernateJpaVendorAdapter();
+        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(generateDdl);
+        return vendorAdapter;
     }
 
     @Bean
