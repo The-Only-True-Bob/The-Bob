@@ -24,5 +24,9 @@ task buildWithoutTests() {
     }
 }
 
+task populateConfig(type :Exec) {
+    commandLine 'sh', './configure.sh'
+}
+
 // uses by heroku
-task stage(dependsOn: ['clean', 'buildWithoutTests'])
+task stage(dependsOn: ['clean', 'populateConfig', 'buildWithoutTests'])
