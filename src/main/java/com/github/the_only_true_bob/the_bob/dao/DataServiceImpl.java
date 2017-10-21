@@ -88,6 +88,10 @@ public class DataServiceImpl implements DataService{
         return eventRepository.findByName(name);
     }
 
+    @Override
+    public List<EventEntity> findAllEventEntities() {
+        return eventRepository.findAllEventEntities();
+    };
 
     @Override
     public void delete(final EventEntity eventEntity) {
