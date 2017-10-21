@@ -33,6 +33,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -150,6 +151,10 @@ public class ApplicationConfiguration {
         dataSource.setUrl(databaseUrl);
         dataSource.setUsername(databaseUser);
         dataSource.setPassword(databasePassword);
+        Properties properties = new Properties();
+        properties.put("useUnicode", "true");
+        properties.put("characterEncoding", "utf-8");
+        dataSource.setConnectionProperties(properties);
         return dataSource;
     }
 
