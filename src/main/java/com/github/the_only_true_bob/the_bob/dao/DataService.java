@@ -25,7 +25,7 @@ public interface DataService {
     List<EventEntity> findEventsByTypeAndDate(String type, String date);
     List<EventEntity> findEventsByTypeAndName(String type, String name);
     List<EventEntity> findEventsByName(String name);
-    List<EventEntity> findAllEventEntities();
+    List<EventEntity> findEventEntities();
     void delete(EventEntity eventEntity);
     void deleteAllEvents();
 

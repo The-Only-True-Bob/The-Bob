@@ -38,7 +38,7 @@ public class FinderImpl implements Finder {
     private Stream<EventEntity> suggest(final String needle) {
         final String textMessage = needle.toLowerCase();
         return dataService
-                .findAllEventEntities()
+                .findEventEntities()
                 .stream()
                 .filter(event -> textMessage.contains(event.getName().toLowerCase()));
     }

@@ -89,9 +89,9 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
-    public List<EventEntity> findAllEventEntities() {
+    public List<EventEntity> findEventEntities() {
         return eventRepository.findAllEventEntities();
-    };
+    }
 
     @Override
     public void delete(final EventEntity eventEntity) {
