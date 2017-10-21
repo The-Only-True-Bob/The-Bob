@@ -18,5 +18,11 @@ dependencies {
     testCompile 'junit:junit:+'
 }
 
-//uses by heroku
-task stage(dependsOn: ['clean', 'build'])
+task buildWithoutTests() {
+    build.doFirst {
+        sourceSets.test.java.srcDirs = []
+    }
+}
+
+// uses by heroku
+task stage(dependsOn: ['clean', 'buildWithoutTests'])
