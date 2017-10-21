@@ -18,12 +18,12 @@ public enum MessageType {
         public Optional<Message> parse(JsonObject body) {
             final Message.Builder builder = Message.builder().setType(this);
             return Optional.ofNullable(body.get("object"))
-                           .map(JsonElement::getAsJsonObject)
-                           .map(object -> builder.setUserVkId(stringFromJson(object, "user_id"))
-                                                 .setPollId(stringFromJson(object, "poll_id"))
-                                                 .setPollId(stringFromJson(object, "option_id"))
-                                                 .build()
-                           );
+                    .map(JsonElement::getAsJsonObject)
+                    .map(object -> builder.setUserVkId(stringFromJson(object, "user_id"))
+                            .setPollId(stringFromJson(object, "poll_id"))
+                            .setPollId(stringFromJson(object, "option_id"))
+                            .build()
+                    );
         }
     },
 
@@ -46,25 +46,21 @@ public enum MessageType {
                     .map(JsonElement::getAsJsonObject)
                     .map(object -> {
                         builder.setUserVkId(stringFromJson(object, "user_id"))
-                               .setText(stringFromJson(object, "body"));
+                                .setText(stringFromJson(object, "body"));
                         Optional.ofNullable(object.get("attachments"))
-                                .ifPresent(attachments -> {
-                                    final List<Attachment> attachmentList =
-                                            stream(attachments.getAsJsonArray().spliterator(), false)
-                                                    .map(JsonElement::getAsJsonObject)
-                                                    .flatMap(attachment ->
-                                                            Optional.ofNullable(attachment.get("type"))
-                                                                    .map(JsonElement::getAsString)
-                                                                    .flatMap(type ->
-                                                                            AttachmentType.of(type)
-                                                                                    .parse(attachment)
-                                                                                    .map(List::stream)
-                                                                    )
-                                                                    .orElseGet(Stream::empty)
-                                                    )
-                                                    .collect(toList());
-                                    builder.setAttachments(attachmentList);
-                                });
+                                .ifPresent(attachments ->
+                                        builder.setAttachments(
+                                                stream(attachments.getAsJsonArray().spliterator(), false)
+                                                        .map(JsonElement::getAsJsonObject)
+                                                        .flatMap(attachment ->
+                                                                Optional.ofNullable(attachment.get("type"))
+                                                                        .map(JsonElement::getAsString)
+                                                                        .flatMap(type ->
+                                                                                AttachmentType.of(type)
+                                                                                        .parse(attachment)
+                                                                                        .map(List::stream))
+                                                                        .orElseGet(Stream::empty))
+                                                        .collect(toList())));
                         return builder;
                     })
                     .map(Message.Builder::build);
