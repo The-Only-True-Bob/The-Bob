@@ -10,6 +10,7 @@ import com.vk.api.sdk.objects.users.UserXtrCounters;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import com.vk.api.sdk.queries.users.UserField;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class VkServiceImpl implements VkService {
     private ServiceActor serviceActor;
     @Autowired
     private List<UserField> allFields;
-    @Autowired
+    @Value("${group.id}")
     private String groupId;
 
     @Override

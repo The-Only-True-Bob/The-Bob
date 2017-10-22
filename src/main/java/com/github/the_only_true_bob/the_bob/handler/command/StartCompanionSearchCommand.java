@@ -26,31 +26,32 @@ public class StartCompanionSearchCommand implements BobCommand {
                         .filter(eue -> CommandStatus.IS_NEED_IN_COMPANION.equals(eue.getStatus()))
                         .findFirst();
 
-        return eventUserEntity
+        final String responseMessage = eventUserEntity
                 .map(eue -> {
-                    if ("1".equals(text)) {
+                    if (text.equals("1")) {
                         user.setStatus(CommandStatus.CHOOSE_SEARCH_CRITERIA);
                         eue.setStatus(CommandStatus.CHOOSE_SEARCH_CRITERIA);
-                        return Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("companion.suggestion.choose_criterions"))
-                                .build();
-                    } else if ("2".equals(text)) {
+                        dataService.saveUser(user);
+                        dataService.saveEventUser(eue);
+                        return messageProvider.get("companion.suggestion.choose_criterions");
+                    } else if (text.equals("2")) {
                         user.setStatus(CommandStatus.NONE);
                         eue.setStatus(CommandStatus.WAS_INTERESTED_IN);
-                        return Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("companion.suggestion.deny_companion"))
-                                .build();
+                        dataService.saveUser(user);
+                        dataService.saveEventUser(eue);
+                        return messageProvider.get("companion.suggestion.deny_companion");
                     }
                     user.setStatus(CommandStatus.NONE);
                     eue.setStatus(CommandStatus.WAS_INTERESTED_IN);
+                    dataService.saveUser(user);
+                    dataService.saveEventUser(eue);
                     return null;
                 })
-                .orElse(
-                        Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("companion.suggestion.strange.deny_companion"))
-                                .build());
+                .orElse(messageProvider.get("companion.suggestion.strange.deny_companion"));
+        return Message
+                .builder()
+                .setUserVkId(user.getVkId())
+                .setText(responseMessage)
+                .build();
     }
 }
