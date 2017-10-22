@@ -5,6 +5,7 @@ import java.util.Optional;
 public interface Attachment {
     AttachmentType type();
     Optional<String> audioArtist();
+    Optional<String> text();
 
     static Attachment empty() {
         return new Attachment() {
@@ -15,6 +16,11 @@ public interface Attachment {
 
             @Override
             public Optional<String> audioArtist() {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<String> text() {
                 return Optional.empty();
             }
         };
@@ -54,6 +60,11 @@ public interface Attachment {
                 @Override
                 public Optional<String> audioArtist() {
                     return Optional.ofNullable(audioArtist);
+                }
+
+                @Override
+                public Optional<String> text() {
+                    return Optional.ofNullable(text);
                 }
             };
         }
