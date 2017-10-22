@@ -37,8 +37,8 @@ public class ChooseSearchCriteriaCommand implements BobCommand {
         return eventUserEntity
                 .map(eue -> {
                     if ("1".equals(text)) {
-                        user.setStatus(CommandStatus.CRITERIA_POLLS);
-                        eue.setStatus(CommandStatus.CRITERIA_POLLS);
+                        user.setStatus(CommandStatus.NONE);
+                        eue.setStatus(CommandStatus.SEARCH_FOR_COMPANION);
                         return Message.builder()
                                 .setUserVkId(user.getVkId())
                                 .setText(messageProvider.get("companion.suggestion.pools"))
