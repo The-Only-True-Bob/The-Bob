@@ -10,8 +10,8 @@ import javax.persistence.*;
 public class EventUserEntity {
 
     private Long id;
-    private String status = "listed";
-    private String stage = "none";
+    private String status = "none";
+    private String stage;
     private UserEntity user;
     private EventEntity event;
     private int number;
