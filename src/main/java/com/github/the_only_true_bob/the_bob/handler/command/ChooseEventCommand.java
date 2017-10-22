@@ -36,6 +36,7 @@ public class ChooseEventCommand implements BobCommand {
                 .map(eue -> {
                     user.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
                     eue.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
+                    dataService.saveUser(user);
                     dataService.saveEventUser(eue);
                     return messageProvider.get("companion.suggestion.intro");
                 })

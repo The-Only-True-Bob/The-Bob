@@ -33,33 +33,33 @@ public class ChooseSearchCriteriaCommand implements BobCommand {
         final Optional<EventUserEntity> eventUserEntity = dataService.findEventsByUser(user).stream()
                 .filter(eue -> CommandStatus.CHOOSE_SEARCH_CRITERIA.equals(eue.getStatus()))
                 .findFirst();
-
-        return eventUserEntity
+        final String responseMessage = eventUserEntity
                 .map(eue -> {
                     if ("1".equals(text)) {
                         user.setStatus(CommandStatus.NONE);
                         eue.setStatus(CommandStatus.SEARCH_FOR_COMPANION);
-                        return Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("companion.suggestion.pools"))
-                                .setCriteriaPollsId(pollAgeId, pollSexId)
-                                .build();
+                        dataService.saveUser(user);
+                        dataService.saveEventUser(eue);
+                        return messageProvider.get("companion.suggestion.pools");
                     } else if ("2".equals(text)) {
                         user.setStatus(CommandStatus.NONE);
                         eue.setStatus(CommandStatus.SEARCH_FOR_COMPANION);
-                        return Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("companion.suggestion.finish"))
-                                .build();
+                        dataService.saveUser(user);
+                        dataService.saveEventUser(eue);
+                        return messageProvider.get("companion.suggestion.finish");
                     }
                     user.setStatus(CommandStatus.NONE);
                     eue.setStatus(CommandStatus.WAS_INTERESTED_IN);
+                    dataService.saveUser(user);
+                    dataService.saveEventUser(eue);
                     return null;
                 })
-                .orElse(
-                        Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("companion.suggestion.strange.deny_companion"))
-                                .build());
+                .orElse(messageProvider.get("companion.suggestion.strange.deny_companion"));
+
+        return Message.builder()
+                .setUserVkId(user.getVkId())
+                .setText(responseMessage)
+                .setCriteriaPollsId(pollAgeId, pollSexId)
+                .build();
     }
 }

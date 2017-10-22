@@ -33,14 +33,23 @@ public class StartCompanionSearchCommand implements BobCommand {
                         eue.setStatus(CommandStatus.CHOOSE_SEARCH_CRITERIA);
                         dataService.saveUser(user);
                         dataService.saveEventUser(eue);
+                        System.out.println("========================================");
+                        System.out.println("User's answer is 1");
+                        System.out.println("========================================");
                         return messageProvider.get("companion.suggestion.choose_criterions");
                     } else if (text.equals("2")) {
                         user.setStatus(CommandStatus.NONE);
                         eue.setStatus(CommandStatus.WAS_INTERESTED_IN);
                         dataService.saveUser(user);
                         dataService.saveEventUser(eue);
+                        System.out.println("========================================");
+                        System.out.println("User's answer is 2");
+                        System.out.println("========================================");
                         return messageProvider.get("companion.suggestion.deny_companion");
                     }
+                    System.out.println("========================================");
+                    System.out.println("User's answer is something");
+                    System.out.println("========================================");
                     user.setStatus(CommandStatus.NONE);
                     eue.setStatus(CommandStatus.WAS_INTERESTED_IN);
                     dataService.saveUser(user);
