@@ -107,7 +107,7 @@ public interface Message {
             return this;
         }
 
-        public Builder setCriteriaPollsId(final String... criteriaPollIds) {
+        public Builder setCriteriaPollsId(String... criteriaPollIds) {
             this.criteriaPollIds = criteriaPollIds;
             return this;
         }

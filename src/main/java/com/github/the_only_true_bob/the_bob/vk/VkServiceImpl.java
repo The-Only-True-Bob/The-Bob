@@ -80,7 +80,7 @@ public class VkServiceImpl implements VkService {
             sendingTextQuery(userId, text)
                     .attachment(
                             Arrays.stream(polls)
-                                    .map(pollId -> String.format("wall%s_%s", groupId, pollId))
+                                    .map(pollId -> String.format("wall-%s_%s", groupId, pollId))
                                     .collect(toList()))
                     .execute();
         } catch (ApiException | ClientException e) {
