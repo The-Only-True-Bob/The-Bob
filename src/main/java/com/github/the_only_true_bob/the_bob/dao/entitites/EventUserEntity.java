@@ -3,7 +3,10 @@ package com.github.the_only_true_bob.the_bob.dao.entitites;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "events_users")
+@Table(
+        name = "events_users",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"event_id", "user_id"}) }
+)
 public class EventUserEntity {
 
     private Long id;
