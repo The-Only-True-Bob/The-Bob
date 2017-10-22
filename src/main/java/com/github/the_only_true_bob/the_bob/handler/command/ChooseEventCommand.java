@@ -34,23 +34,27 @@ public class ChooseEventCommand implements BobCommand {
 
         final String responseMessage = eventUserEntity
                 .map(eue -> {
-                    user.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
-                    eue.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
-                    dataService.saveUser(user);
-                    dataService.saveEventUser(eue);
+                    updateEntities(user, eue, CommandStatus.IS_NEED_IN_COMPANION, CommandStatus.IS_NEED_IN_COMPANION);
                     return messageProvider.get("companion.suggestion.intro");
                 })
                 .orElseGet(() -> {
                             user.setStatus(CommandStatus.NONE);
+                            dataService.saveUser(user);
                             return messageProvider.get("companion.suggestion.strange.deny_companion");
                         }
                 );
 
-        dataService.saveUser(user);
         return Message
                 .builder()
                 .setUserVkId(user.getVkId())
                 .setText(responseMessage)
                 .build();
+    }
+
+    private void updateEntities(UserEntity user, EventUserEntity eue, String userStatus, String eueStatus) {
+        user.setStatus(userStatus);
+        eue.setStatus(eueStatus);
+        dataService.saveUser(user);
+        dataService.saveEventUser(eue);
     }
 }
