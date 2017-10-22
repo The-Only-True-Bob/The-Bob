@@ -29,20 +29,21 @@ public class ChooseEventCommand implements BobCommand {
                 .filter(eue -> text.equals(String.valueOf(eue.getNumber())))
                 .findFirst();
 
-        return eventUserEntity
+        final String responseMessage = eventUserEntity
                 .map(eue -> {
                     user.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
                     eue.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
-                    return Message.builder()
-                            .setUserVkId(user.getVkId())
-                            .setText(messageProvider.get("companion.suggestion.intro"))
-                            .build();
+                    return messageProvider.get("companion.suggestion.intro");
                 })
-                .orElse(
-                        Message.builder()
-                                .setUserVkId(user.getVkId())
-                                .setText(messageProvider.get("event.choose"))
-                                .build()
+                .orElseGet(() -> {
+                            user.setStatus(CommandStatus.LISTED);
+                            return messageProvider.get("companion.suggestion.strange.deny_companion");
+                        }
                 );
+        return Message
+                .builder()
+                .setUserVkId(user.getVkId())
+                .setText(responseMessage)
+                .build();
     }
 }
