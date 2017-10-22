@@ -30,9 +30,8 @@ public class SuggestCommand implements BobCommand {
         final int[] num = {1};
         final List<String> suggestions = eventEntities
                 .map(eventEntity -> {
-                    final EventUserEntity eventUserEntity = new EventUserEntity();
-                    eventUserEntity.setEvent(eventEntity);
-                    eventUserEntity.setUser(dataService.findUserByVkId(userId).get());
+                    final EventUserEntity eventUserEntity = dataService.findEventUserByEventAndUser(eventEntity, dataService.findUserByVkId(userId).get())
+                            .orElseGet(EventUserEntity::new);
                     eventUserEntity.setNumber(num[0]);
                     eventUserEntity.setStatus(CommandStatus.LISTED);
                     dataService.saveEventUser(eventUserEntity);
