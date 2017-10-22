@@ -25,7 +25,10 @@ public class ChooseEventCommand implements BobCommand {
         final String text = message.text().orElse("");
         final Optional<EventUserEntity> eventUserEntity = events.stream()
                 .filter(eue -> CommandStatus.LISTED.equals(eue.getStatus()))
-                .peek(eue -> eue.setStatus(CommandStatus.NONE))
+                .peek(eue -> {
+                    eue.setStatus(CommandStatus.NONE);
+                    dataService.saveEventUser(eue);
+                })
                 .filter(eue -> text.equals(String.valueOf(eue.getNumber())))
                 .findFirst();
 
@@ -33,13 +36,16 @@ public class ChooseEventCommand implements BobCommand {
                 .map(eue -> {
                     user.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
                     eue.setStatus(CommandStatus.IS_NEED_IN_COMPANION);
+                    dataService.saveEventUser(eue);
                     return messageProvider.get("companion.suggestion.intro");
                 })
                 .orElseGet(() -> {
-                            user.setStatus(CommandStatus.LISTED);
+                            user.setStatus(CommandStatus.NONE);
                             return messageProvider.get("companion.suggestion.strange.deny_companion");
                         }
                 );
+
+        dataService.saveUser(user);
         return Message
                 .builder()
                 .setUserVkId(user.getVkId())
