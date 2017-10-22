@@ -9,6 +9,7 @@ import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.vk.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +28,7 @@ public class SuggestCommand implements BobCommand {
         String userId = message.userId().get();
         final Message.Builder builder = Message.builder().setUserVkId(userId);
         final int[] num = {1};
-        final String suggestions = eventEntities
+        final List<String> suggestions = eventEntities
                 .map(eventEntity -> {
                     final EventUserEntity eventUserEntity = new EventUserEntity();
                     eventUserEntity.setEvent(eventEntity);
@@ -45,8 +46,12 @@ public class SuggestCommand implements BobCommand {
                             eventEntity.getAfishaUrl(),
                             eventEntity.getAfishaImgUrl());
                 })
-                .collect(Collectors.joining());
-        final String response = suggestions.isEmpty() ? messageProvider.get("event.not_found") : suggestions;
+                .collect(Collectors.toList());
+        final String response = suggestions.isEmpty()
+                ? messageProvider.get("event.not_found")
+                : messageProvider.get("event.proposal.intro", suggestions.size())
+                                 .concat(String.join("", suggestions))
+                                 .concat(messageProvider.get("event.choose"));
         return builder.setText(response).build();
     }
 }
