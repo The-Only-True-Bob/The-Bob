@@ -124,6 +124,11 @@ public class DataServiceImpl implements DataService{
     }
 
     @Override
+    public List<EventUserEntity> findAllEventUsers() {
+        return eventUserRepository.findAll();
+    }
+
+    @Override
     public void delete(final EventUserEntity eventUserEntity) {
         eventUserRepository.delete(eventUserEntity);
     }

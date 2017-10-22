@@ -30,6 +30,10 @@ public class UserMatch {
         this.criteriaValues = criteriaValues;
     }
 
+    public List<CriteriaValue> criteriaValues() {
+        return criteriaValues;
+    }
+
     static UserMatch from(final CommunicativePair pair) {
         final Optional<UserEntity> leftEntity = getLeftUserEntityByVkId(pair);
         final Optional<UserEntity> rightEntity = getRightUserEntityByVkId(pair);
@@ -127,6 +131,10 @@ public class UserMatch {
         return criteriaValues.stream()
                 .mapToInt(Supplier::get)
                 .sum();
+    }
+
+    public User notMe(final User user) {
+        return user.vkId().equals(pair.left().vkId()) ? pair.right() : pair.left();
     }
 
     public static class MatchingParameterObject {

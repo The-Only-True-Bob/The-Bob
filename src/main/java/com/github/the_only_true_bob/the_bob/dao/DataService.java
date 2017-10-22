@@ -34,7 +34,9 @@ public interface DataService {
     Optional<EventUserEntity> findEventUserById(Long id);
     List<EventUserEntity> findEventsByUser(UserEntity userEntity);
     List<EventUserEntity> findUsersByEvent(EventEntity eventEntity);
+    List<EventUserEntity> findAllEventUsers();
     void delete(EventUserEntity eventUserEntity);
+
     void deleteAllEventUsers();
 
     //find usersByAcceptableAgeAndAcceptableDiff and eventTypeAndName
