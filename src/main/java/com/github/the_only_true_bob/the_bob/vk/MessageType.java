@@ -55,10 +55,10 @@ public enum MessageType {
                                                         .flatMap(attachment ->
                                                                 Optional.ofNullable(attachment.get("type"))
                                                                         .map(JsonElement::getAsString)
-                                                                        .flatMap(type ->
+                                                                        .map(type ->
                                                                                 AttachmentType.of(type)
                                                                                         .parse(attachment)
-                                                                                        .map(List::stream))
+                                                                                        .stream())
                                                                         .orElseGet(Stream::empty))
                                                         .collect(toList())));
                         return builder;

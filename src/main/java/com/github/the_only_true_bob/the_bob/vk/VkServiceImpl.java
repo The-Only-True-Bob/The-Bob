@@ -6,16 +6,16 @@ import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.friends.responses.GetResponse;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
+import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import com.vk.api.sdk.queries.users.UserField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,12 +31,20 @@ public class VkServiceImpl implements VkService {
     private ServiceActor serviceActor;
     @Autowired
     private List<UserField> allFields;
+    @Autowired
+    private String groupId;
 
     @Override
     public VkService sendMessage(final Message message) {
         message.userId().ifPresent(
                 userId -> message.text().ifPresent(
-                        text -> sendMessage(userId, text)));
+                        text -> {
+                            if (message.criteriaPollIds().isPresent()) {
+                                sendMessageWithAttachment(userId, text, message.criteriaPollIds().get());
+                            } else {
+                                sendMessage(userId, text);
+                            }
+                        }));
         return this;
     }
 
@@ -56,16 +64,34 @@ public class VkServiceImpl implements VkService {
 
     private void sendMessage(String userId, String text) {
         try {
-            vkApiClient
-                    .messages()
-                    .send(groupActor)
-                    .userId(Integer.parseInt(userId))
-                    .message(text)
+            sendingTextQuery(userId, text)
                     .execute();
         } catch (ApiException | ClientException e) {
             // TODO: 21/10/17 log!
             e.printStackTrace();
         }
+    }
+
+    private void sendMessageWithAttachment(final String userId, final String text, final String[] polls) {
+        try {
+            sendingTextQuery(userId, text)
+                    .attachment(
+                            Arrays.stream(polls)
+                                    .map(pollId -> String.format("wall%s_%s", groupId, pollId))
+                                    .collect(toList()))
+                    .execute();
+        } catch (ApiException | ClientException e) {
+            // TODO: 22/10/17 log!
+            e.printStackTrace();
+        }
+    }
+
+    private MessagesSendQuery sendingTextQuery(final String userId, final String text) {
+        return vkApiClient
+                .messages()
+                .send(groupActor)
+                .userId(Integer.parseInt(userId))
+                .message(text);
     }
 
     private List<UserXtrCounters> getUsersWithAllFields(List<String> userIds) {

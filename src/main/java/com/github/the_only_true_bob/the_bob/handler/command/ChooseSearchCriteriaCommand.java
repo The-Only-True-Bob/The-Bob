@@ -7,6 +7,7 @@ import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
 import com.github.the_only_true_bob.the_bob.vk.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Optional;
 
@@ -16,6 +17,13 @@ public class ChooseSearchCriteriaCommand implements BobCommand {
     private DataService dataService;
     @Autowired
     private MessageProvider messageProvider;
+
+    @Value("${poll.age.id}")
+    private String pollAgeId;
+    @Value("${poll.sex.id}")
+    private String pollSexId;
+    @Value("${group.id}")
+    private int groupId;
 
     @Override
     public Message handleMessage(final Message message) {
@@ -34,7 +42,7 @@ public class ChooseSearchCriteriaCommand implements BobCommand {
                         return Message.builder()
                                 .setUserVkId(user.getVkId())
                                 .setText(messageProvider.get("companion.suggestion.pools"))
-                                //todo ADD POLLS reposts
+                                .setCriteriaPollsId(pollAgeId, pollSexId)
                                 .build();
                     } else if ("2".equals(text)) {
                         user.setStatus(CommandStatus.NONE);

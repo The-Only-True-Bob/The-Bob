@@ -12,6 +12,7 @@ public interface Message {
     MessageType type();
     Optional<String> text();
     Optional<String> pollId();
+    Optional<String[]> criteriaPollIds();
     Optional<String> optionId();
     List<Attachment> attachments();
     Optional<String> userId();
@@ -36,6 +37,11 @@ public interface Message {
 
             @Override
             public Optional<String> pollId() {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<String[]> criteriaPollIds() {
                 return Optional.empty();
             }
 
@@ -67,6 +73,7 @@ public interface Message {
         private String pollId;
         private String optionId;
         private List<Attachment> attachments;
+        private String[] criteriaPollIds;
 
         private Builder() { }
 
@@ -100,6 +107,11 @@ public interface Message {
             return this;
         }
 
+        public Builder setCriteriaPollsId(final String... criteriaPollIds) {
+            this.criteriaPollIds = criteriaPollIds;
+            return this;
+        }
+
         public Message build() {
             return new Message() {
                 @Override
@@ -115,6 +127,11 @@ public interface Message {
                 @Override
                 public Optional<String> pollId() {
                     return Optional.ofNullable(pollId);
+                }
+
+                @Override
+                public Optional<String[]> criteriaPollIds() {
+                    return Optional.ofNullable(criteriaPollIds);
                 }
 
                 @Override
