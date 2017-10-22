@@ -128,6 +128,10 @@ public class DataServiceImpl implements DataService{
         return eventUserRepository.findAll();
     }
 
+    public Optional<EventUserEntity> findEventUserByEventAndUser(EventEntity eventEntity, UserEntity userEntity) {
+        return eventUserRepository.findByEventAndUser(eventEntity, userEntity);
+    }
+
     @Override
     public void delete(final EventUserEntity eventUserEntity) {
         eventUserRepository.delete(eventUserEntity);
