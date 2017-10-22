@@ -85,12 +85,17 @@ public class UserMatch {
         final UserEntity leftEntity = parameterObject.left;
         final UserEntity rightEntity = parameterObject.right;
 
-        return left.birthday()
+        final boolean matched = left.birthday()
                 .flatMap(leftBirthday ->
                         right.birthday()
                                 .filter(rightBirthday -> isBirthdayCapable(leftEntity, leftBirthday, rightBirthday))
                                 .filter(rightBirthday -> isBirthdayCapable(rightEntity, rightBirthday, leftBirthday)))
                 .isPresent();
+
+        System.out.println("===========================================");
+        System.out.println(" Age is " + (matched ? "" : " not ") + "matched");
+        System.out.println("===========================================");
+        return matched;
     }
 
     private static boolean isBirthdayCapable(final UserEntity entity1, final String user1Birthday, final String user2Birthday) {
@@ -149,6 +154,9 @@ public class UserMatch {
             this.left = left;
             this.right = right;
             this.pair = pair;
+            System.out.println("===========================================");
+            System.out.println(" Matching parameters of " + left.getVkId() + " and " + right.getVkId());
+            System.out.println("===========================================");
         }
 
         public UserEntity getLeft() {
