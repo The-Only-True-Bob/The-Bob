@@ -27,6 +27,7 @@ public interface Attachment {
     class Builder {
         private AttachmentType type;
         private String audioArtist;
+        private String text;
 
         public Builder setType(AttachmentType type) {
             this.type = type;
@@ -35,6 +36,11 @@ public interface Attachment {
 
         public Builder setAudioArtist(String audioArtist) {
             this.audioArtist = audioArtist;
+            return this;
+        }
+
+        public Builder setText(String text) {
+            this.text = text;
             return this;
         }
 
