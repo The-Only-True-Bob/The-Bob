@@ -33,33 +33,30 @@ public class ChooseSearchCriteriaCommand implements BobCommand {
         final Optional<EventUserEntity> eventUserEntity = dataService.findEventsByUser(user).stream()
                 .filter(eue -> CommandStatus.CHOOSE_SEARCH_CRITERIA.equals(eue.getStatus()))
                 .findFirst();
+        final Message.Builder builder = Message.builder()
+                .setUserVkId(user.getVkId());
         final String responseMessage = eventUserEntity
                 .map(eue -> {
                     if ("1".equals(text)) {
-                        user.setStatus(CommandStatus.NONE);
-                        eue.setStatus(CommandStatus.SEARCH_FOR_COMPANION);
-                        dataService.saveUser(user);
-                        dataService.saveEventUser(eue);
+                        updateEntities(user, eue, CommandStatus.NONE, CommandStatus.SEARCH_FOR_COMPANION);
+                        builder.setCriteriaPollsId(pollAgeId, pollSexId);
                         return messageProvider.get("companion.suggestion.pools");
                     } else if ("2".equals(text)) {
-                        user.setStatus(CommandStatus.NONE);
-                        eue.setStatus(CommandStatus.SEARCH_FOR_COMPANION);
-                        dataService.saveUser(user);
-                        dataService.saveEventUser(eue);
+                        updateEntities(user, eue, CommandStatus.NONE, CommandStatus.SEARCH_FOR_COMPANION);
                         return messageProvider.get("companion.suggestion.finish");
                     }
-                    user.setStatus(CommandStatus.NONE);
-                    eue.setStatus(CommandStatus.WAS_INTERESTED_IN);
-                    dataService.saveUser(user);
-                    dataService.saveEventUser(eue);
+                    updateEntities(user, eue, CommandStatus.NONE, CommandStatus.WAS_INTERESTED_IN);
                     return null;
                 })
                 .orElse(messageProvider.get("companion.suggestion.strange.deny_companion"));
 
-        return Message.builder()
-                .setUserVkId(user.getVkId())
-                .setText(responseMessage)
-                .setCriteriaPollsId(pollAgeId, pollSexId)
-                .build();
+        return builder.setText(responseMessage).build();
+    }
+
+    private void updateEntities(UserEntity user, EventUserEntity eue, String userStatus, String eueStatus) {
+        user.setStatus(userStatus);
+        eue.setStatus(eueStatus);
+        dataService.saveUser(user);
+        dataService.saveEventUser(eue);
     }
 }
