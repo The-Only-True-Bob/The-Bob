@@ -33,7 +33,12 @@ public class SuggestCommand implements BobCommand {
                 .map(eventEntity -> {
                     final UserEntity userEntity = dataService.findUserByVkId(userId).get();
                     final EventUserEntity eventUserEntity = dataService.findEventUserByEventAndUser(eventEntity, userEntity)
-                            .orElseGet(EventUserEntity::new);
+                            .orElseGet(() -> {
+                                final EventUserEntity eue = new EventUserEntity();
+                                eue.setEvent(eventEntity);
+                                eue.setUser(userEntity);
+                                return eue;
+                            });
                     eventUserEntity.setNumber(num[0]);
                     eventUserEntity.setStatus(CommandStatus.LISTED);
                     userEntity.setStatus(CommandStatus.LISTED);
