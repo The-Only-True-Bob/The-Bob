@@ -4,9 +4,7 @@ import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")

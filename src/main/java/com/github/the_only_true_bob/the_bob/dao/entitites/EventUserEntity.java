@@ -42,7 +42,7 @@ public class EventUserEntity {
         this.stage = stage;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     public UserEntity getUser() {
         return user;
@@ -52,7 +52,7 @@ public class EventUserEntity {
         this.user = user;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     public EventEntity getEvent() {
         return event;
