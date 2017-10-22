@@ -155,10 +155,9 @@ public class User {
         }
 
         public Builder setMusic(String music) {
-            this.music =
-                    Arrays.stream(music.split(",\\s*"))
-                            .map(String::trim)
-                            .collect(toList());
+            Optional.ofNullable(music)
+                    .map(m -> Arrays.stream(m.split(",\\s*")))
+                    .ifPresent(m-> this.music = m.map(String::trim).collect(toList()));
             return this;
         }
 

@@ -36,6 +36,7 @@ public class UserEntity {
         this.id = id;
     }
 
+    @Column(unique = true)
     public String getVkId() {
         return vkId;
     }

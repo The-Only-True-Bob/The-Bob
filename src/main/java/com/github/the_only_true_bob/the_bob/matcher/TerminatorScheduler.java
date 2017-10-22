@@ -30,48 +30,56 @@ public class TerminatorScheduler {
 
     @Scheduled(cron = "${terminator.scheduling.cron}")
     public void reportCurrentTime() {
+        System.out.println("===========================================");
+        System.out.println(" Cron");
+        System.out.println("===========================================");
         dataService.findAllEventUsers().stream()
                 .map(EventUserEntity::getEvent)
                 .distinct()
-                .filter(ee -> ee.getEventUserEntities().size() > 2)
+                .peek(System.out::println)
+//                .filter(ee -> ee.getEventUserEntities().size() > 0)
                 .map(bobMatcher::match)
-                .forEach((final Map<User, List<UserMatch>> map) ->
-                        map.entrySet().stream()
-                                .flatMap(entry ->
-                                        entry.getValue().isEmpty()
-                                                ? Stream.empty()
-                                                : Stream.of(entry))
-                                .map(entry -> {
-                                    final User user = entry.getKey();
-                                    final List<UserMatch> matchesList = entry.getValue();
+                .forEach((final Map<User, List<UserMatch>> map) -> {
+                    System.out.println("===========================================");
+                    System.out.println(" Match has return size: " + map.size());
+                    System.out.println("===========================================");
+                    map.entrySet().stream()
+                            .flatMap(entry ->
+                                    entry.getValue().isEmpty()
+                                            ? Stream.empty()
+                                            : Stream.of(entry))
+                            .map(entry -> {
+                                final User user = entry.getKey();
+                                final List<UserMatch> matchesList = entry.getValue();
 
-                                    final Message.Builder builder =
-                                            Message.builder().setUserVkId(user.vkId());
+                                final Message.Builder builder =
+                                        Message.builder().setUserVkId(user.vkId());
 
-                                    final String companions = matchesList.stream()
-                                            .map(userMatch -> {
-                                                final User companion = userMatch.notMe(user);
+                                final String companions = matchesList.stream()
+                                        .map(userMatch -> {
+                                            final User companion = userMatch.notMe(user);
 
-                                                final String criterias = userMatch.criteriaValues().stream()
-                                                        .filter(CriteriaValue::is)
-                                                        .map(CriteriaValue::toString)
-                                                        .collect(Collectors.joining());
+                                            final String criterias = userMatch.criteriaValues().stream()
+                                                    .filter(CriteriaValue::is)
+                                                    .map(CriteriaValue::toString)
+                                                    .collect(Collectors.joining());
 
-                                                return messageProvider.get(
-                                                        "companion.suggestion.companion.info",
-                                                        companion.firstName(),
-                                                        companion.lastName(),
-                                                        criterias);
-                                            })
-                                            .collect(Collectors.joining());
+                                            return messageProvider.get(
+                                                    "companion.suggestion.companion.info",
+                                                    companion.firstName(),
+                                                    companion.lastName(),
+                                                    criterias);
+                                        })
+                                        .collect(Collectors.joining());
 
-                                    return builder.setText(
-                                            String.format("%s %s",
-                                                    messageProvider.get("companion.suggestion.companion.intro",
-                                                            matchesList.size()),
-                                                    companions))
-                                            .build();
-                                })
-                                .forEach(vkService::sendMessage));
+                                return builder.setText(
+                                        String.format("%s %s",
+                                                messageProvider.get("companion.suggestion.companion.intro",
+                                                        matchesList.size()),
+                                                companions))
+                                        .build();
+                            })
+                            .forEach(vkService::sendMessage);
+                });
     }
 }

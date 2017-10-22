@@ -19,6 +19,9 @@ public class StartCompanionSearchCommand implements BobCommand {
 
     @Override
     public Message handleMessage(final Message message) {
+        System.out.println("=================================");
+        System.out.println(getClass().getName());
+        System.out.println("=================================");
         final UserEntity user = dataService.findUserByVkId(message.userId().get()).get();
         final String text = message.text().orElse("");
         final Optional<EventUserEntity> eventUserEntity =

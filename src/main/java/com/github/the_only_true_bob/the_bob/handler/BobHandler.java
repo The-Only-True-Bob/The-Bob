@@ -53,7 +53,7 @@ class BobHandler implements Handler {
                             final UserEntity userEntity =
                                     dataService
                                             .findUserByVkId(userId)
-                                            .orElseGet(() -> dataService.saveUser(new UserEntity(userId)));
+                                            .orElse(new UserEntity(userId));
                             vkService.sendMessage(
                                     commandsMap
                                             .get(userEntity.getStatus())

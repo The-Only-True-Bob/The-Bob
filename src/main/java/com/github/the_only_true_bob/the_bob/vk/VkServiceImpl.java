@@ -6,6 +6,8 @@ import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.objects.base.BaseObject;
+import com.vk.api.sdk.objects.base.Sex;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import com.vk.api.sdk.queries.users.UserField;
@@ -140,10 +142,10 @@ public class VkServiceImpl implements VkService {
                 .setLastName(userXtrCounters.getLastName())
                 .setFriends(friends)
                 .setGroups(groups)
-                .setSex(userXtrCounters.getSex().getValue().toString())
+                .setSex(Optional.ofNullable(userXtrCounters.getSex()).map(Sex::getValue).map(String::valueOf).orElse("3"))
                 .setAbout(userXtrCounters.getAbout())
                 .setBirthday(userXtrCounters.getBdate())
-                .setCity(userXtrCounters.getCity().getTitle())
+                .setCity(Optional.ofNullable(userXtrCounters.getCity()).map(BaseObject::getTitle).orElse(null))
                 .setHomeTown(userXtrCounters.getHomeTown())
                 .setMusic(userXtrCounters.getMusic())
                 .build();

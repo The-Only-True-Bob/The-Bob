@@ -25,6 +25,9 @@ public class SuggestCommand implements BobCommand {
 
     @Override
     public Message handleMessage(final Message message) {
+        System.out.println("=================================");
+        System.out.println(getClass().getName());
+        System.out.println("=================================");
         final Stream<EventEntity> eventEntities = finder.suggestEventsFor(message);
         String userId = message.userId().get();
         final Message.Builder builder = Message.builder().setUserVkId(userId);

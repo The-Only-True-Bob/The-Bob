@@ -1,5 +1,7 @@
 package com.github.the_only_true_bob.the_bob.dao.entitites;
 
+import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +12,7 @@ import javax.persistence.*;
 public class EventUserEntity {
 
     private Long id;
-    private String status = "none";
+    private String status = CommandStatus.NONE;
     private String stage;
     private UserEntity user;
     private EventEntity event;
@@ -45,7 +47,7 @@ public class EventUserEntity {
         this.stage = stage;
     }
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     public UserEntity getUser() {
         return user;
@@ -55,7 +57,7 @@ public class EventUserEntity {
         this.user = user;
     }
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     public EventEntity getEvent() {
         return event;

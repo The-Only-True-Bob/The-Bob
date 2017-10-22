@@ -32,6 +32,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -47,6 +48,7 @@ import static java.util.stream.Collectors.toList;
 @ComponentScan("com.github.the_only_true_bob.the_bob")
 @EnableJpaRepositories("com.github.the_only_true_bob.the_bob")
 @PropertySource("classpath:config.properties")
+@EnableScheduling
 public class ApplicationConfiguration {
 
     @Value("${spring.datasource.url}")

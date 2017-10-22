@@ -4,6 +4,7 @@ import com.github.the_only_true_bob.the_bob.dao.DataService;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventUserEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.UserEntity;
+import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.vk.User;
 import com.github.the_only_true_bob.the_bob.vk.VkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,12 @@ public class BobMatcher implements Matcher {
 
     @Override
     public Map<User, List<UserMatch>> match(final EventEntity eventEntity) {
+        System.out.println("===========================================");
+        System.out.println(" Match ");
+        System.out.println("===========================================");
         final List<UserEntity> usersEntities =
                 dataService.findUsersByEvent(eventEntity).stream()
-                        .filter(eventUserEntity -> "passive".equals(eventUserEntity.getStatus()))
+                        .filter(eventUserEntity -> CommandStatus.SEARCH_FOR_COMPANION.equals(eventUserEntity.getStatus()))
                         .map(EventUserEntity::getUser)
                         .collect(toList());
 

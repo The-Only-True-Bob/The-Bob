@@ -20,6 +20,9 @@ public class ChooseEventCommand implements BobCommand {
 
     @Override
     public Message handleMessage(final Message message) {
+        System.out.println("=================================");
+        System.out.println(getClass().getName());
+        System.out.println("=================================");
         final UserEntity user = dataService.findUserByVkId(message.userId().get()).get();
         final List<EventUserEntity> events = dataService.findEventsByUser(user);
         final String text = message.text().orElse("");
@@ -35,15 +38,29 @@ public class ChooseEventCommand implements BobCommand {
         final String responseMessage = eventUserEntity
                 .map(eue -> {
                     updateEntities(user, eue, CommandStatus.IS_NEED_IN_COMPANION, CommandStatus.IS_NEED_IN_COMPANION);
+                    System.out.println("==========================================================");
+                    System.out.println("====== Changing both status to is_need_in_companion ======");
+                    System.out.println(dataService.findUserByVkId(message.userId().get()).get().getStatus());
+                    System.out.println(dataService.findEventUserById(eue.getId()).get().getStatus());
+                    System.out.println("==========================================================");
                     return messageProvider.get("companion.suggestion.intro");
                 })
                 .orElseGet(() -> {
                             user.setStatus(CommandStatus.NONE);
                             dataService.saveUser(user);
+                            System.out.println("==========================================================");
+                            System.out.println("====== Changing user status to none ======");
+                            System.out.println(dataService.findUserByVkId(message.userId().get()).get().getStatus());
+                            System.out.println("==========================================================");
                             return messageProvider.get("companion.suggestion.strange.deny_companion");
                         }
                 );
 
+        System.out.println("==========================================================");
+        System.out.println("====== Statuses ======");
+        System.out.println(dataService.findUserByVkId(message.userId().get()).get().getStatus());
+        dataService.findEventsByUser(user).forEach(bla -> System.out.println(bla.getStatus()));
+        System.out.println("==========================================================");
         return Message
                 .builder()
                 .setUserVkId(user.getVkId())
