@@ -1,22 +1,16 @@
 package com.github.the_only_true_bob.the_bob.handler;
 
 import com.github.the_only_true_bob.the_bob.dao.DataService;
-import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
-import com.github.the_only_true_bob.the_bob.dao.entitites.EventUserEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.UserEntity;
-import com.github.the_only_true_bob.the_bob.finder.Finder;
 import com.github.the_only_true_bob.the_bob.handler.command.BobCommand;
 import com.github.the_only_true_bob.the_bob.vk.Message;
 import com.github.the_only_true_bob.the_bob.vk.VkService;
 import com.github.the_only_true_bob.the_bob.vk.polls.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 class BobHandler implements Handler {
 
@@ -28,7 +22,7 @@ class BobHandler implements Handler {
     private MessageProvider messageProvider;
     @Autowired
     private List<Poll> polls;
-    @Autowired
+    @Resource
     private Map<String, BobCommand> commandsMap;
 
     @Override
