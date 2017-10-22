@@ -3,6 +3,7 @@ package com.github.the_only_true_bob.the_bob.handler.command;
 import com.github.the_only_true_bob.the_bob.dao.DataService;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventEntity;
 import com.github.the_only_true_bob.the_bob.dao.entitites.EventUserEntity;
+import com.github.the_only_true_bob.the_bob.dao.entitites.UserEntity;
 import com.github.the_only_true_bob.the_bob.finder.Finder;
 import com.github.the_only_true_bob.the_bob.handler.CommandStatus;
 import com.github.the_only_true_bob.the_bob.handler.MessageProvider;
@@ -30,11 +31,14 @@ public class SuggestCommand implements BobCommand {
         final int[] num = {1};
         final List<String> suggestions = eventEntities
                 .map(eventEntity -> {
-                    final EventUserEntity eventUserEntity = dataService.findEventUserByEventAndUser(eventEntity, dataService.findUserByVkId(userId).get())
+                    final UserEntity userEntity = dataService.findUserByVkId(userId).get();
+                    final EventUserEntity eventUserEntity = dataService.findEventUserByEventAndUser(eventEntity, userEntity)
                             .orElseGet(EventUserEntity::new);
                     eventUserEntity.setNumber(num[0]);
                     eventUserEntity.setStatus(CommandStatus.LISTED);
+                    userEntity.setStatus(CommandStatus.LISTED);
                     dataService.saveEventUser(eventUserEntity);
+                    dataService.saveUser(userEntity);
                     return messageProvider.get("event.proposal.event",
                             num[0]++,
                             eventEntity.getType(),
