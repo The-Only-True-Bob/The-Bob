@@ -56,6 +56,7 @@ public class TerminatorScheduler {
                                         Message.builder().setUserVkId(user.vkId());
 
                                 final String companions = matchesList.stream()
+                                        .filter(userMatch -> userMatch.notMe(user) != user)
                                         .map(userMatch -> {
                                             final User companion = userMatch.notMe(user);
 
@@ -66,8 +67,9 @@ public class TerminatorScheduler {
 
                                             return messageProvider.get(
                                                     "companion.suggestion.companion.info",
-                                                    companion.firstName(),
-                                                    companion.lastName(),
+                                                    companion.firstName().orElse(""),
+                                                    companion.lastName().orElse(""),
+                                                    "https://vk.com/id" + companion.vkId(),
                                                     criterias);
                                         })
                                         .collect(Collectors.joining());
@@ -75,7 +77,7 @@ public class TerminatorScheduler {
                                 return builder.setText(
                                         String.format("%s %s",
                                                 messageProvider.get("companion.suggestion.companion.intro",
-                                                        matchesList.size()),
+                                                        matchesList.size() - 2),
                                                 companions))
                                         .build();
                             })

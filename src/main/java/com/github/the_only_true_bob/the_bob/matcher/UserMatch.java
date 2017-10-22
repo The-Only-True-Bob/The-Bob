@@ -50,6 +50,9 @@ public class UserMatch {
     }
 
     private static List<CriteriaValue> getMatchCriteriaValues(final MatchingParameterObject parameterObject) {
+        System.out.println("===========================================");
+        System.out.println(" Match has return size: ");
+        System.out.println("===========================================");
         return Arrays.asList(
                 friendsCriteria.calc(parameterObject),
                 musicCriteria.calc(parameterObject),
