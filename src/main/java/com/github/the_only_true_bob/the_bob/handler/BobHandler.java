@@ -27,8 +27,6 @@ class BobHandler implements Handler {
 
     @Override
     public void accept(Message message) {
-        // TODO: 20.10.17 Accept message and process
-        System.err.println("That's the way the cookie crumbles!");
         switch (message.type()) {
             case ALLOW_MESSAGE:
                 message.userId()
@@ -62,18 +60,13 @@ class BobHandler implements Handler {
                         });
                 break;
             case POLL:
-                // TODO: 21/10/17 add more sence
-                message.userId().ifPresent(userId -> {
-                    message.pollId()
-                            .flatMap(pollId -> polls.stream()
-                                    .filter(poll -> pollId.equals(poll.id()))
-                                    .findFirst())
-                            .ifPresent(poll -> poll.handle(message));
-                    vkService.sendMessage(Message.builder()
-                            .setUserVkId(userId)
-                            .setText("poll vote")
-                            .build());
-                });
+                message.userId().ifPresent(userId ->
+                        message.pollId()
+                                .flatMap(pollId ->
+                                        polls.stream()
+                                                .filter(poll -> pollId.equals(poll.id()))
+                                                .findFirst())
+                                .ifPresent(poll -> poll.handle(message)));
                 break;
             case UNASSIGNED:
                 message.userId().ifPresent(userId ->

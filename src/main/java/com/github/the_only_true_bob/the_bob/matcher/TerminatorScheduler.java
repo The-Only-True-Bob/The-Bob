@@ -30,19 +30,12 @@ public class TerminatorScheduler {
 
     @Scheduled(cron = "${terminator.scheduling.cron}")
     public void reportCurrentTime() {
-        System.out.println("===========================================");
-        System.out.println(" Cron");
-        System.out.println("===========================================");
         dataService.findAllEventUsers().stream()
                 .map(EventUserEntity::getEvent)
                 .distinct()
                 .peek(System.out::println)
-//                .filter(ee -> ee.getEventUserEntities().size() > 0)
                 .map(bobMatcher::match)
                 .forEach((final Map<User, List<UserMatch>> map) -> {
-                    System.out.println("===========================================");
-                    System.out.println(" Match has return size: " + map.size());
-                    System.out.println("===========================================");
                     map.entrySet().stream()
                             .flatMap(entry ->
                                     entry.getValue().isEmpty()

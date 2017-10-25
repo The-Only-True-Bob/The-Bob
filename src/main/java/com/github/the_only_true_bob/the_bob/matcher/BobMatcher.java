@@ -10,6 +10,7 @@ import com.github.the_only_true_bob.the_bob.vk.VkService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -24,53 +25,50 @@ public class BobMatcher implements Matcher {
 
     @Override
     public Map<User, List<UserMatch>> match(final EventEntity eventEntity) {
-        System.out.println("===========================================");
-        System.out.println(" Match ");
-        System.out.println("===========================================");
-        final List<UserEntity> usersEntities =
+        final List<String> usersVkIds =
                 dataService.findUsersByEvent(eventEntity).stream()
-                        .filter(eventUserEntity -> CommandStatus.SEARCH_FOR_COMPANION.equals(eventUserEntity.getStatus()))
+                        .filter(eventUserEntity ->
+                                CommandStatus.SEARCH_FOR_COMPANION.equals(eventUserEntity.getStatus()))
                         .map(EventUserEntity::getUser)
+                        .map(UserEntity::getVkId)
                         .collect(toList());
-
-        final List<String> usersVkIds = usersEntities.stream()
-                .map(UserEntity::getVkId)
-                .collect(toList());
 
         final List<User> users = vkService.getUsers(usersVkIds);
 
-        // алгоритм: tuple - match, потом flatMap на user - match, потом collect groupingBy user
+        final Map<CommunicativePair, UserMatch> pairsMatches =
+                users.stream()
+                        .flatMap(userA ->
+                                users.stream()
+                                        .map(userB -> CommunicativePair.of(userA, userB)))
+                        .distinct()
+                        .collect(toMap(Function.identity(), UserMatch::from));
 
-        final Set<CommunicativePair> pairs = users.stream()
-                .filter(this::vkIdIsNotNull)
-                .flatMap(userA -> users.stream()
-                        .filter(this::vkIdIsNotNull)
-                        .map(userB -> CommunicativePair.of(userA, userB)))
-                .collect(toSet());
-
-        final Map<CommunicativePair, UserMatch> pairsMatches = pairs.stream()
-                .collect(toMap(Function.identity(), UserMatch::from));
-
-        final Stream<Map.Entry<User, UserMatch>> entryStream = pairsMatches.entrySet().stream()
-                .flatMap(entry -> Stream.of(
-                        new AbstractMap.SimpleEntry<>(entry.getKey().left(), entry.getValue()),
-                        new AbstractMap.SimpleEntry<>(entry.getKey().right(), entry.getValue())));
-
-        final Map<User, List<Map.Entry<User, UserMatch>>> usersMatches = entryStream
-                .collect(groupingBy(Map.Entry::getKey, toList()));
+        final Map<User, List<Entry<User, UserMatch>>> usersMatches =
+                pairsMatches.entrySet().stream()
+                        .flatMap(entry1 -> Stream.of(leftUserMatch(entry1), rightUserMatch(entry1)))
+                        .collect(groupingBy(Entry::getKey, toList()));
 
         return usersMatches
                 .entrySet().stream()
                 .collect(toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue().stream()
-                                .map(Map.Entry::getValue)
-                                .filter(UserMatch::matches)
-                                .sorted(Comparator.comparing(UserMatch::value))
-                                .collect(toList())));
+                        Entry::getKey,
+                        entry ->
+                                entry.getValue().stream()
+                                        .map(Entry::getValue)
+                                        .filter(UserMatch::matches)
+                                        .sorted(Comparator.comparing(UserMatch::value))
+                                        .collect(toList())));
     }
 
-    private boolean vkIdIsNotNull(final User user) {
-        return user.vkId() != null;
+    private Entry<User, UserMatch> leftUserMatch(final Entry<CommunicativePair, UserMatch> entry) {
+        return entry(entry.getKey().left(), entry.getValue());
+    }
+
+    private Entry<User, UserMatch> rightUserMatch(final Entry<CommunicativePair, UserMatch> entry) {
+        return entry(entry.getKey().right(), entry.getValue());
+    }
+
+    private Entry<User, UserMatch> entry(final User user, final UserMatch match) {
+        return new AbstractMap.SimpleEntry<>(user, match);
     }
 }
