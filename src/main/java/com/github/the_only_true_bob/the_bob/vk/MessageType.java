@@ -15,32 +15,33 @@ import static java.util.stream.StreamSupport.stream;
 public enum MessageType {
     POLL("poll_vote_new") {
         @Override
-        public Optional<Message> parse(JsonObject body) {
+        public Message parse(JsonObject body) {
             final Message.Builder builder = Message.builder().setType(this);
             return Optional.ofNullable(body.get("object"))
                     .map(JsonElement::getAsJsonObject)
                     .map(object -> builder.setUserVkId(stringFromJson(object, "user_id"))
                             .setPollId(stringFromJson(object, "poll_id"))
-                            .setPollId(stringFromJson(object, "option_id"))
-                            .build()
-                    );
+                            .setOptionId(stringFromJson(object, "option_id"))
+                            .build())
+                    .orElseGet(Message::empty);
         }
     },
 
     ALLOW_MESSAGE("message_allow") {
         @Override
-        public Optional<Message> parse(final JsonObject body) {
+        public Message parse(final JsonObject body) {
             final Message.Builder builder = Message.builder().setType(this);
             return Optional.ofNullable(body.get("object"))
                     .map(JsonElement::getAsJsonObject)
                     .map(object -> builder.setUserVkId(stringFromJson(object, "user_id"))
-                            .build());
+                            .build())
+                    .orElseGet(Message::empty);
         }
     },
 
     MESSAGE("message_new") {
         @Override
-        public Optional<Message> parse(JsonObject body) {
+        public Message parse(JsonObject body) {
             final Message.Builder builder = Message.builder().setType(this);
             return Optional.ofNullable(body.get("object"))
                     .map(JsonElement::getAsJsonObject)
@@ -63,14 +64,15 @@ public enum MessageType {
                                                         .collect(toList())));
                         return builder;
                     })
-                    .map(Message.Builder::build);
+                    .map(Message.Builder::build)
+                    .orElseGet(Message::empty);
         }
     },
 
     UNASSIGNED("UNASSIGNED") {
         @Override
-        public Optional<Message> parse(JsonObject body) {
-            return Optional.empty();
+        public Message parse(JsonObject body) {
+            return Message.empty();
         }
     };
 
@@ -92,5 +94,5 @@ public enum MessageType {
                 .orElse(UNASSIGNED);
     }
 
-    public abstract Optional<Message> parse(JsonObject body);
+    public abstract Message parse(JsonObject body);
 }

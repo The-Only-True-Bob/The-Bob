@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.github.the_only_true_bob.the_bob.utils.Utils.arrayFromJson;
+import static com.github.the_only_true_bob.the_bob.utils.Utils.objectFromJson;
 import static com.github.the_only_true_bob.the_bob.utils.Utils.stringFromJson;
 import static java.util.stream.Collectors.toList;
 
@@ -18,24 +19,23 @@ public enum AttachmentType {
     AUDIO("audio") {
         @Override
         public List<Attachment> parse(JsonObject attachment) {
-            return StreamSupport.stream(arrayFromJson(attachment, "audio").spliterator(), false)
+            final Attachment.Builder builder = Attachment.builder().setType(this);
+            return objectFromJson(attachment, toString())
                     .map(JsonElement::getAsJsonObject)
-                    .map(object ->
-                            Attachment.builder()
-                                    .setType(this)
-                                    .setAudioArtist(stringFromJson(object, "artist"))
-                                    .build())
-                    .collect(toList());
+                    .map(object -> builder.setAudioArtist(stringFromJson(object, "artist"))
+                           .build())
+                    .map(Arrays::asList)
+                    .orElseGet(Collections::emptyList);
         }
     },
 
     WALL("wall") {
         @Override
         public List<Attachment> parse(JsonObject attachment) {
-            return StreamSupport.stream(arrayFromJson(attachment, "wall").spliterator(), false)
-                    .map(JsonElement::getAsJsonObject)
-                    .flatMap(this::getAllSubattachments)
-                    .collect(toList());
+            return objectFromJson(attachment, toString())
+                    .map(this::getAllSubattachments)
+                    .map(stream -> stream.collect(toList()))
+                    .orElseGet(Collections::emptyList);
         }
 
         private Stream<Attachment> getAllSubattachments(final JsonObject object) {
@@ -43,14 +43,15 @@ public enum AttachmentType {
                     getTextAttachment(stringFromJson(object, "text"));
 
             final Stream<Attachment> subStream =
-                    StreamSupport.stream(arrayFromJson(object, "attachment").spliterator(), false)
+                    StreamSupport.stream(arrayFromJson(object, "attachments").spliterator(), false)
                             .map(JsonElement::getAsJsonObject)
                             .flatMap(attachment ->
                                     AttachmentType.of(stringFromJson(attachment, "type"))
                                             .parse(attachment).stream());
 
             return textAttachment
-                    .map(attach -> Stream.concat(Stream.of(attach), subStream))
+                    .map(Stream::of)
+                    .map(attach -> Stream.concat(attach, subStream))
                     .orElse(subStream);
         }
 

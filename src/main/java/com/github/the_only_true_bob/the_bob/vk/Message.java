@@ -19,8 +19,7 @@ public interface Message {
 
     static Message from(final JsonObject body) {
         return MessageType.of(stringFromJson(body, "type"))
-                          .parse(body)
-                          .orElseGet(Message::empty);
+                          .parse(body);
     }
 
     static Message empty() {

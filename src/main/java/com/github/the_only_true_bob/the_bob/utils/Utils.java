@@ -18,8 +18,15 @@ public class Utils {
     }
 
     public static JsonArray arrayFromJson(final JsonObject attachment, final String property) {
-        return Optional.ofNullable(attachment.get(property))
+        return Optional.ofNullable(attachment)
+                .map(attach -> attach.get(property))
                 .map(JsonElement::getAsJsonArray)
                 .orElseGet(JsonArray::new);
+    }
+
+    public static Optional<JsonObject> objectFromJson(final JsonObject attachment, final String property) {
+        return Optional.ofNullable(attachment)
+                .map(attach -> attach.get(property))
+                .map(JsonElement::getAsJsonObject);
     }
 }
